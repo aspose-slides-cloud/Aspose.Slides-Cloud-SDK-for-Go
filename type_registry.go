@@ -153,6 +153,12 @@ func init() {
 	typeRegistry["Camera"] = reflect.TypeOf(Camera{})
 	
 	typeDeterminers["Camera"] = make(map[string]string)
+	typeRegistry["CaptionTrack"] = reflect.TypeOf(CaptionTrack{})
+	derivedTypes["CaptionTrack"] = "ResourceBase"
+	typeDeterminers["CaptionTrack"] = make(map[string]string)
+	typeRegistry["CaptionTracks"] = reflect.TypeOf(CaptionTracks{})
+	derivedTypes["CaptionTracks"] = "ResourceBase"
+	typeDeterminers["CaptionTracks"] = make(map[string]string)
 	typeRegistry["Chart"] = reflect.TypeOf(Chart{})
 	derivedTypes["Chart"] = "ShapeBase"
 	typeDeterminers["Chart"] = make(map[string]string)

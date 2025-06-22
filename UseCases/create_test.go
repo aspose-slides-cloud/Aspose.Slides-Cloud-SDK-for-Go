@@ -31,7 +31,7 @@ import (
 	"io/ioutil"
 	"testing"
 
-	slidescloud "github.com/aspose-slides-cloud/aspose-slides-cloud-go/v24"
+	slidescloud "github.com/aspose-slides-cloud/aspose-slides-cloud-go/v25"
 )
 
 /*
@@ -147,7 +147,7 @@ func TestCreateFromHtml(t *testing.T) {
 		t.Errorf("Error: %v.", e)
 		return
 	}
-	_, _, e = c.SlidesApi.ImportFromHtml(fileName, "<html><body>New Content</body></html>", "", folderName, "")
+	_, _, e = c.SlidesApi.ImportFromHtml(fileName, "<html><body>New Content</body></html>", "", folderName, "", nil, nil)
 	if e != nil {
 		t.Errorf("Error: %v.", e)
 		return
@@ -174,7 +174,7 @@ func TestAppendFromHtml(t *testing.T) {
 		return
 	}
 	slideCount := len(getResponse1.GetSlideList())
-	_, _, e = c.SlidesApi.ImportFromHtml(fileName, "<html><body>New Content</body></html>", password, folderName, "")
+	_, _, e = c.SlidesApi.ImportFromHtml(fileName, "<html><body>New Content</body></html>", password, folderName, "", nil, nil)
 	if e != nil {
 		t.Errorf("Error: %v.", e)
 		return

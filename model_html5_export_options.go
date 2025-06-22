@@ -53,6 +53,10 @@ type IHtml5ExportOptions interface {
 	GetFontSubstRules() []IFontSubstRule
 	SetFontSubstRules(newValue []IFontSubstRule)
 
+	// True to skip hyperlinks with javascript calls when saving the presentation.
+	GetSkipJavaScriptLinks() *bool
+	SetSkipJavaScriptLinks(newValue *bool)
+
 	// Export format.
 	GetFormat() string
 	SetFormat(newValue string)
@@ -70,12 +74,16 @@ type IHtml5ExportOptions interface {
 	SetEmbedImages(newValue *bool)
 
 	// Slides layouting options
-	GetNotesCommentsLayouting() INotesCommentsLayoutingOptions
-	SetNotesCommentsLayouting(newValue INotesCommentsLayoutingOptions)
+	GetSlidesLayoutOptions() ISlidesLayoutOptions
+	SetSlidesLayoutOptions(newValue ISlidesLayoutOptions)
 
 	// Path to custom templates
 	GetTemplatesPath() string
 	SetTemplatesPath(newValue string)
+
+	// true to disable ligatures in the rendered output.
+	GetDisableFontLigatures() *bool
+	SetDisableFontLigatures(newValue *bool)
 }
 
 type Html5ExportOptions struct {
@@ -95,6 +103,9 @@ type Html5ExportOptions struct {
 	// Gets of sets list of font substitution rules.
 	FontSubstRules []IFontSubstRule `json:"FontSubstRules,omitempty"`
 
+	// True to skip hyperlinks with javascript calls when saving the presentation.
+	SkipJavaScriptLinks *bool `json:"SkipJavaScriptLinks"`
+
 	// Export format.
 	Format string `json:"Format,omitempty"`
 
@@ -108,10 +119,13 @@ type Html5ExportOptions struct {
 	EmbedImages *bool `json:"EmbedImages"`
 
 	// Slides layouting options
-	NotesCommentsLayouting INotesCommentsLayoutingOptions `json:"NotesCommentsLayouting,omitempty"`
+	SlidesLayoutOptions ISlidesLayoutOptions `json:"SlidesLayoutOptions,omitempty"`
 
 	// Path to custom templates
 	TemplatesPath string `json:"TemplatesPath,omitempty"`
+
+	// true to disable ligatures in the rendered output.
+	DisableFontLigatures *bool `json:"DisableFontLigatures"`
 }
 
 func NewHtml5ExportOptions() *Html5ExportOptions {
@@ -154,6 +168,13 @@ func (this *Html5ExportOptions) GetFontSubstRules() []IFontSubstRule {
 func (this *Html5ExportOptions) SetFontSubstRules(newValue []IFontSubstRule) {
 	this.FontSubstRules = newValue
 }
+func (this *Html5ExportOptions) GetSkipJavaScriptLinks() *bool {
+	return this.SkipJavaScriptLinks
+}
+
+func (this *Html5ExportOptions) SetSkipJavaScriptLinks(newValue *bool) {
+	this.SkipJavaScriptLinks = newValue
+}
 func (this *Html5ExportOptions) GetFormat() string {
 	return this.Format
 }
@@ -182,12 +203,12 @@ func (this *Html5ExportOptions) GetEmbedImages() *bool {
 func (this *Html5ExportOptions) SetEmbedImages(newValue *bool) {
 	this.EmbedImages = newValue
 }
-func (this *Html5ExportOptions) GetNotesCommentsLayouting() INotesCommentsLayoutingOptions {
-	return this.NotesCommentsLayouting
+func (this *Html5ExportOptions) GetSlidesLayoutOptions() ISlidesLayoutOptions {
+	return this.SlidesLayoutOptions
 }
 
-func (this *Html5ExportOptions) SetNotesCommentsLayouting(newValue INotesCommentsLayoutingOptions) {
-	this.NotesCommentsLayouting = newValue
+func (this *Html5ExportOptions) SetSlidesLayoutOptions(newValue ISlidesLayoutOptions) {
+	this.SlidesLayoutOptions = newValue
 }
 func (this *Html5ExportOptions) GetTemplatesPath() string {
 	return this.TemplatesPath
@@ -195,6 +216,13 @@ func (this *Html5ExportOptions) GetTemplatesPath() string {
 
 func (this *Html5ExportOptions) SetTemplatesPath(newValue string) {
 	this.TemplatesPath = newValue
+}
+func (this *Html5ExportOptions) GetDisableFontLigatures() *bool {
+	return this.DisableFontLigatures
+}
+
+func (this *Html5ExportOptions) SetDisableFontLigatures(newValue *bool) {
+	this.DisableFontLigatures = newValue
 }
 
 func (this *Html5ExportOptions) UnmarshalJSON(b []byte) error {
@@ -293,6 +321,17 @@ func (this *Html5ExportOptions) UnmarshalJSON(b []byte) error {
 		}
 	}
 	
+	if valSkipJavaScriptLinks, ok := GetMapValue(objMap, "skipJavaScriptLinks"); ok {
+		if valSkipJavaScriptLinks != nil {
+			var valueForSkipJavaScriptLinks *bool
+			err = json.Unmarshal(*valSkipJavaScriptLinks, &valueForSkipJavaScriptLinks)
+			if err != nil {
+				return err
+			}
+			this.SkipJavaScriptLinks = valueForSkipJavaScriptLinks
+		}
+	}
+	
 	if valFormat, ok := GetMapValue(objMap, "format"); ok {
 		if valFormat != nil {
 			var valueForFormat string
@@ -337,24 +376,24 @@ func (this *Html5ExportOptions) UnmarshalJSON(b []byte) error {
 		}
 	}
 	
-	if valNotesCommentsLayouting, ok := GetMapValue(objMap, "notesCommentsLayouting"); ok {
-		if valNotesCommentsLayouting != nil {
-			var valueForNotesCommentsLayouting NotesCommentsLayoutingOptions
-			err = json.Unmarshal(*valNotesCommentsLayouting, &valueForNotesCommentsLayouting)
+	if valSlidesLayoutOptions, ok := GetMapValue(objMap, "slidesLayoutOptions"); ok {
+		if valSlidesLayoutOptions != nil {
+			var valueForSlidesLayoutOptions SlidesLayoutOptions
+			err = json.Unmarshal(*valSlidesLayoutOptions, &valueForSlidesLayoutOptions)
 			if err != nil {
 				return err
 			}
-			vObject, err := createObjectForType("NotesCommentsLayoutingOptions", *valNotesCommentsLayouting)
+			vObject, err := createObjectForType("SlidesLayoutOptions", *valSlidesLayoutOptions)
 			if err != nil {
 				return err
 			}
-			err = json.Unmarshal(*valNotesCommentsLayouting, &vObject)
+			err = json.Unmarshal(*valSlidesLayoutOptions, &vObject)
 			if err != nil {
 				return err
 			}
-			vInterfaceObject, ok := vObject.(INotesCommentsLayoutingOptions)
+			vInterfaceObject, ok := vObject.(ISlidesLayoutOptions)
 			if ok {
-				this.NotesCommentsLayouting = vInterfaceObject
+				this.SlidesLayoutOptions = vInterfaceObject
 			}
 		}
 	}
@@ -367,6 +406,17 @@ func (this *Html5ExportOptions) UnmarshalJSON(b []byte) error {
 				return err
 			}
 			this.TemplatesPath = valueForTemplatesPath
+		}
+	}
+	
+	if valDisableFontLigatures, ok := GetMapValue(objMap, "disableFontLigatures"); ok {
+		if valDisableFontLigatures != nil {
+			var valueForDisableFontLigatures *bool
+			err = json.Unmarshal(*valDisableFontLigatures, &valueForDisableFontLigatures)
+			if err != nil {
+				return err
+			}
+			this.DisableFontLigatures = valueForDisableFontLigatures
 		}
 	}
 

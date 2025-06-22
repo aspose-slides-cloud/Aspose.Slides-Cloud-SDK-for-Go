@@ -149,6 +149,10 @@ type IAudioFrame interface {
 	GetVolume() string
 	SetVolume(newValue string)
 
+	// Audio volume percent.
+	GetVolumeValue() float64
+	SetVolumeValue(newValue float64)
+
 	// Audio data encoded in base64.
 	GetBase64Data() string
 	SetBase64Data(newValue string)
@@ -160,6 +164,22 @@ type IAudioFrame interface {
 	// Determines whether audio is automatically rewound to start after playing.
 	GetRewindAudio() *bool
 	SetRewindAudio(newValue *bool)
+
+	// Time duration for the initial fade-in of the media in milliseconds.
+	GetFadeInDuration() float64
+	SetFadeInDuration(newValue float64)
+
+	// Time duration for the ending fade-out of the media in milliseconds.
+	GetFadeOutDuration() float64
+	SetFadeOutDuration(newValue float64)
+
+	// Time duration to be removed from the beginning of the media during playback in milliseconds.
+	GetTrimFromStart() float64
+	SetTrimFromStart(newValue float64)
+
+	// Time duration to be removed from the end of the media during playback in milliseconds.
+	GetTrimFromEnd() float64
+	SetTrimFromEnd(newValue float64)
 
 	// Picture fill format.
 	GetPictureFillFormat() IPictureFill
@@ -255,6 +275,9 @@ type AudioFrame struct {
 	// Returns or sets the audio volume.
 	Volume string `json:"Volume,omitempty"`
 
+	// Audio volume percent.
+	VolumeValue float64 `json:"VolumeValue,omitempty"`
+
 	// Audio data encoded in base64.
 	Base64Data string `json:"Base64Data,omitempty"`
 
@@ -263,6 +286,18 @@ type AudioFrame struct {
 
 	// Determines whether audio is automatically rewound to start after playing.
 	RewindAudio *bool `json:"RewindAudio"`
+
+	// Time duration for the initial fade-in of the media in milliseconds.
+	FadeInDuration float64 `json:"FadeInDuration,omitempty"`
+
+	// Time duration for the ending fade-out of the media in milliseconds.
+	FadeOutDuration float64 `json:"FadeOutDuration,omitempty"`
+
+	// Time duration to be removed from the beginning of the media during playback in milliseconds.
+	TrimFromStart float64 `json:"TrimFromStart,omitempty"`
+
+	// Time duration to be removed from the end of the media during playback in milliseconds.
+	TrimFromEnd float64 `json:"TrimFromEnd,omitempty"`
 
 	// Picture fill format.
 	PictureFillFormat IPictureFill `json:"PictureFillFormat,omitempty"`
@@ -478,6 +513,13 @@ func (this *AudioFrame) GetVolume() string {
 func (this *AudioFrame) SetVolume(newValue string) {
 	this.Volume = newValue
 }
+func (this *AudioFrame) GetVolumeValue() float64 {
+	return this.VolumeValue
+}
+
+func (this *AudioFrame) SetVolumeValue(newValue float64) {
+	this.VolumeValue = newValue
+}
 func (this *AudioFrame) GetBase64Data() string {
 	return this.Base64Data
 }
@@ -498,6 +540,34 @@ func (this *AudioFrame) GetRewindAudio() *bool {
 
 func (this *AudioFrame) SetRewindAudio(newValue *bool) {
 	this.RewindAudio = newValue
+}
+func (this *AudioFrame) GetFadeInDuration() float64 {
+	return this.FadeInDuration
+}
+
+func (this *AudioFrame) SetFadeInDuration(newValue float64) {
+	this.FadeInDuration = newValue
+}
+func (this *AudioFrame) GetFadeOutDuration() float64 {
+	return this.FadeOutDuration
+}
+
+func (this *AudioFrame) SetFadeOutDuration(newValue float64) {
+	this.FadeOutDuration = newValue
+}
+func (this *AudioFrame) GetTrimFromStart() float64 {
+	return this.TrimFromStart
+}
+
+func (this *AudioFrame) SetTrimFromStart(newValue float64) {
+	this.TrimFromStart = newValue
+}
+func (this *AudioFrame) GetTrimFromEnd() float64 {
+	return this.TrimFromEnd
+}
+
+func (this *AudioFrame) SetTrimFromEnd(newValue float64) {
+	this.TrimFromEnd = newValue
 }
 func (this *AudioFrame) GetPictureFillFormat() IPictureFill {
 	return this.PictureFillFormat
@@ -948,6 +1018,17 @@ func (this *AudioFrame) UnmarshalJSON(b []byte) error {
 		}
 	}
 	
+	if valVolumeValue, ok := GetMapValue(objMap, "volumeValue"); ok {
+		if valVolumeValue != nil {
+			var valueForVolumeValue float64
+			err = json.Unmarshal(*valVolumeValue, &valueForVolumeValue)
+			if err != nil {
+				return err
+			}
+			this.VolumeValue = valueForVolumeValue
+		}
+	}
+	
 	if valBase64Data, ok := GetMapValue(objMap, "base64Data"); ok {
 		if valBase64Data != nil {
 			var valueForBase64Data string
@@ -978,6 +1059,50 @@ func (this *AudioFrame) UnmarshalJSON(b []byte) error {
 				return err
 			}
 			this.RewindAudio = valueForRewindAudio
+		}
+	}
+	
+	if valFadeInDuration, ok := GetMapValue(objMap, "fadeInDuration"); ok {
+		if valFadeInDuration != nil {
+			var valueForFadeInDuration float64
+			err = json.Unmarshal(*valFadeInDuration, &valueForFadeInDuration)
+			if err != nil {
+				return err
+			}
+			this.FadeInDuration = valueForFadeInDuration
+		}
+	}
+	
+	if valFadeOutDuration, ok := GetMapValue(objMap, "fadeOutDuration"); ok {
+		if valFadeOutDuration != nil {
+			var valueForFadeOutDuration float64
+			err = json.Unmarshal(*valFadeOutDuration, &valueForFadeOutDuration)
+			if err != nil {
+				return err
+			}
+			this.FadeOutDuration = valueForFadeOutDuration
+		}
+	}
+	
+	if valTrimFromStart, ok := GetMapValue(objMap, "trimFromStart"); ok {
+		if valTrimFromStart != nil {
+			var valueForTrimFromStart float64
+			err = json.Unmarshal(*valTrimFromStart, &valueForTrimFromStart)
+			if err != nil {
+				return err
+			}
+			this.TrimFromStart = valueForTrimFromStart
+		}
+	}
+	
+	if valTrimFromEnd, ok := GetMapValue(objMap, "trimFromEnd"); ok {
+		if valTrimFromEnd != nil {
+			var valueForTrimFromEnd float64
+			err = json.Unmarshal(*valTrimFromEnd, &valueForTrimFromEnd)
+			if err != nil {
+				return err
+			}
+			this.TrimFromEnd = valueForTrimFromEnd
 		}
 	}
 	

@@ -53,6 +53,10 @@ type IPptxExportOptions interface {
 	GetFontSubstRules() []IFontSubstRule
 	SetFontSubstRules(newValue []IFontSubstRule)
 
+	// True to skip hyperlinks with javascript calls when saving the presentation.
+	GetSkipJavaScriptLinks() *bool
+	SetSkipJavaScriptLinks(newValue *bool)
+
 	// Export format.
 	GetFormat() string
 	SetFormat(newValue string)
@@ -64,6 +68,10 @@ type IPptxExportOptions interface {
 	// Specifies whether the ZIP64 format is used for the Presentation document. The default value is Zip64Mode.IfNecessary.
 	GetZip64Mode() string
 	SetZip64Mode(newValue string)
+
+	// True to refresh the presentation thumbnail on save
+	GetRefreshThumbnail() *bool
+	SetRefreshThumbnail(newValue *bool)
 }
 
 type PptxExportOptions struct {
@@ -83,6 +91,9 @@ type PptxExportOptions struct {
 	// Gets of sets list of font substitution rules.
 	FontSubstRules []IFontSubstRule `json:"FontSubstRules,omitempty"`
 
+	// True to skip hyperlinks with javascript calls when saving the presentation.
+	SkipJavaScriptLinks *bool `json:"SkipJavaScriptLinks"`
+
 	// Export format.
 	Format string `json:"Format,omitempty"`
 
@@ -91,6 +102,9 @@ type PptxExportOptions struct {
 
 	// Specifies whether the ZIP64 format is used for the Presentation document. The default value is Zip64Mode.IfNecessary.
 	Zip64Mode string `json:"Zip64Mode,omitempty"`
+
+	// True to refresh the presentation thumbnail on save
+	RefreshThumbnail *bool `json:"RefreshThumbnail"`
 }
 
 func NewPptxExportOptions() *PptxExportOptions {
@@ -133,6 +147,13 @@ func (this *PptxExportOptions) GetFontSubstRules() []IFontSubstRule {
 func (this *PptxExportOptions) SetFontSubstRules(newValue []IFontSubstRule) {
 	this.FontSubstRules = newValue
 }
+func (this *PptxExportOptions) GetSkipJavaScriptLinks() *bool {
+	return this.SkipJavaScriptLinks
+}
+
+func (this *PptxExportOptions) SetSkipJavaScriptLinks(newValue *bool) {
+	this.SkipJavaScriptLinks = newValue
+}
 func (this *PptxExportOptions) GetFormat() string {
 	return this.Format
 }
@@ -153,6 +174,13 @@ func (this *PptxExportOptions) GetZip64Mode() string {
 
 func (this *PptxExportOptions) SetZip64Mode(newValue string) {
 	this.Zip64Mode = newValue
+}
+func (this *PptxExportOptions) GetRefreshThumbnail() *bool {
+	return this.RefreshThumbnail
+}
+
+func (this *PptxExportOptions) SetRefreshThumbnail(newValue *bool) {
+	this.RefreshThumbnail = newValue
 }
 
 func (this *PptxExportOptions) UnmarshalJSON(b []byte) error {
@@ -251,6 +279,17 @@ func (this *PptxExportOptions) UnmarshalJSON(b []byte) error {
 		}
 	}
 	
+	if valSkipJavaScriptLinks, ok := GetMapValue(objMap, "skipJavaScriptLinks"); ok {
+		if valSkipJavaScriptLinks != nil {
+			var valueForSkipJavaScriptLinks *bool
+			err = json.Unmarshal(*valSkipJavaScriptLinks, &valueForSkipJavaScriptLinks)
+			if err != nil {
+				return err
+			}
+			this.SkipJavaScriptLinks = valueForSkipJavaScriptLinks
+		}
+	}
+	
 	if valFormat, ok := GetMapValue(objMap, "format"); ok {
 		if valFormat != nil {
 			var valueForFormat string
@@ -293,6 +332,17 @@ func (this *PptxExportOptions) UnmarshalJSON(b []byte) error {
 			} else {
 				this.Zip64Mode = valueForZip64Mode
 			}
+		}
+	}
+	
+	if valRefreshThumbnail, ok := GetMapValue(objMap, "refreshThumbnail"); ok {
+		if valRefreshThumbnail != nil {
+			var valueForRefreshThumbnail *bool
+			err = json.Unmarshal(*valRefreshThumbnail, &valueForRefreshThumbnail)
+			if err != nil {
+				return err
+			}
+			this.RefreshThumbnail = valueForRefreshThumbnail
 		}
 	}
 

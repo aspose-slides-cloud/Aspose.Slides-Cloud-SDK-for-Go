@@ -53,6 +53,10 @@ type ISvgExportOptions interface {
 	GetFontSubstRules() []IFontSubstRule
 	SetFontSubstRules(newValue []IFontSubstRule)
 
+	// True to skip hyperlinks with javascript calls when saving the presentation.
+	GetSkipJavaScriptLinks() *bool
+	SetSkipJavaScriptLinks(newValue *bool)
+
 	//          Export format.          
 	GetFormat() string
 	SetFormat(newValue string)
@@ -100,6 +104,10 @@ type ISvgExportOptions interface {
 	// Determines whether to perform the specified rotation of the shape when rendering or not.
 	GetUseFrameRotation() *bool
 	SetUseFrameRotation(newValue *bool)
+
+	// true to disable ligatures in the rendered output.
+	GetDisableFontLigatures() *bool
+	SetDisableFontLigatures(newValue *bool)
 }
 
 type SvgExportOptions struct {
@@ -118,6 +126,9 @@ type SvgExportOptions struct {
 
 	// Gets of sets list of font substitution rules.
 	FontSubstRules []IFontSubstRule `json:"FontSubstRules,omitempty"`
+
+	// True to skip hyperlinks with javascript calls when saving the presentation.
+	SkipJavaScriptLinks *bool `json:"SkipJavaScriptLinks"`
 
 	//          Export format.          
 	Format string `json:"Format,omitempty"`
@@ -154,6 +165,9 @@ type SvgExportOptions struct {
 
 	// Determines whether to perform the specified rotation of the shape when rendering or not.
 	UseFrameRotation *bool `json:"UseFrameRotation"`
+
+	// true to disable ligatures in the rendered output.
+	DisableFontLigatures *bool `json:"DisableFontLigatures"`
 }
 
 func NewSvgExportOptions() *SvgExportOptions {
@@ -195,6 +209,13 @@ func (this *SvgExportOptions) GetFontSubstRules() []IFontSubstRule {
 
 func (this *SvgExportOptions) SetFontSubstRules(newValue []IFontSubstRule) {
 	this.FontSubstRules = newValue
+}
+func (this *SvgExportOptions) GetSkipJavaScriptLinks() *bool {
+	return this.SkipJavaScriptLinks
+}
+
+func (this *SvgExportOptions) SetSkipJavaScriptLinks(newValue *bool) {
+	this.SkipJavaScriptLinks = newValue
 }
 func (this *SvgExportOptions) GetFormat() string {
 	return this.Format
@@ -279,6 +300,13 @@ func (this *SvgExportOptions) GetUseFrameRotation() *bool {
 
 func (this *SvgExportOptions) SetUseFrameRotation(newValue *bool) {
 	this.UseFrameRotation = newValue
+}
+func (this *SvgExportOptions) GetDisableFontLigatures() *bool {
+	return this.DisableFontLigatures
+}
+
+func (this *SvgExportOptions) SetDisableFontLigatures(newValue *bool) {
+	this.DisableFontLigatures = newValue
 }
 
 func (this *SvgExportOptions) UnmarshalJSON(b []byte) error {
@@ -374,6 +402,17 @@ func (this *SvgExportOptions) UnmarshalJSON(b []byte) error {
 				}
 			}
 			this.FontSubstRules = valueForIFontSubstRules
+		}
+	}
+	
+	if valSkipJavaScriptLinks, ok := GetMapValue(objMap, "skipJavaScriptLinks"); ok {
+		if valSkipJavaScriptLinks != nil {
+			var valueForSkipJavaScriptLinks *bool
+			err = json.Unmarshal(*valSkipJavaScriptLinks, &valueForSkipJavaScriptLinks)
+			if err != nil {
+				return err
+			}
+			this.SkipJavaScriptLinks = valueForSkipJavaScriptLinks
 		}
 	}
 	
@@ -518,6 +557,17 @@ func (this *SvgExportOptions) UnmarshalJSON(b []byte) error {
 				return err
 			}
 			this.UseFrameRotation = valueForUseFrameRotation
+		}
+	}
+	
+	if valDisableFontLigatures, ok := GetMapValue(objMap, "disableFontLigatures"); ok {
+		if valDisableFontLigatures != nil {
+			var valueForDisableFontLigatures *bool
+			err = json.Unmarshal(*valDisableFontLigatures, &valueForDisableFontLigatures)
+			if err != nil {
+				return err
+			}
+			this.DisableFontLigatures = valueForDisableFontLigatures
 		}
 	}
 

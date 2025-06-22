@@ -1,9 +1,9 @@
 {
-    "AppSid": "@your_client_id@",
-    "AppKey": "@your_client_secret@",
-    "BaseUrl" : "@base_url@",
-    "AsyncBaseUrl" : "@async_base_url@",
-    "AuthBaseUrl" : "@base_auth_url@",
-    "Debug" : false,
-    "AllowInsecureRequests" : true
+  "AppSid": "slides.cloud",
+  "AppKey": "slides.cloud",
+  "BaseUrl": "https://slides-cloud.qa.aspose.cloud",
+  "AsyncBaseUrl": "https://slides-cloud-async-api.qa.aspose.cloud",
+  "AuthBaseUrl": "https://id-qa.aspose.cloud",
+  "Debug": false,
+  "AllowInsecureRequests": true
 }

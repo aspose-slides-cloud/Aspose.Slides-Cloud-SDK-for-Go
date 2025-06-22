@@ -53,6 +53,10 @@ type IMarkdownExportOptions interface {
 	GetFontSubstRules() []IFontSubstRule
 	SetFontSubstRules(newValue []IFontSubstRule)
 
+	// True to skip hyperlinks with javascript calls when saving the presentation.
+	GetSkipJavaScriptLinks() *bool
+	SetSkipJavaScriptLinks(newValue *bool)
+
 	// Export format.
 	GetFormat() string
 	SetFormat(newValue string)
@@ -84,6 +88,18 @@ type IMarkdownExportOptions interface {
 	// Specifies whether the generated document should include hidden slides. Default is false. 
 	GetShowHiddenSlides() *bool
 	SetShowHiddenSlides(newValue *bool)
+
+	// true to remove empty or whitespace-only lines from the final Markdown output. Default is false. 
+	GetRemoveEmptyLines() *bool
+	SetRemoveEmptyLines(newValue *bool)
+
+	// Specifies how repeated space characters are preserved to maintain visual alignment. 
+	GetHandleRepeatedSpaces() string
+	SetHandleRepeatedSpaces(newValue string)
+
+	// The format of slide number headers. 
+	GetSlideNumberFormat() string
+	SetSlideNumberFormat(newValue string)
 }
 
 type MarkdownExportOptions struct {
@@ -102,6 +118,9 @@ type MarkdownExportOptions struct {
 
 	// Gets of sets list of font substitution rules.
 	FontSubstRules []IFontSubstRule `json:"FontSubstRules,omitempty"`
+
+	// True to skip hyperlinks with javascript calls when saving the presentation.
+	SkipJavaScriptLinks *bool `json:"SkipJavaScriptLinks"`
 
 	// Export format.
 	Format string `json:"Format,omitempty"`
@@ -126,6 +145,15 @@ type MarkdownExportOptions struct {
 
 	// Specifies whether the generated document should include hidden slides. Default is false. 
 	ShowHiddenSlides *bool `json:"ShowHiddenSlides"`
+
+	// true to remove empty or whitespace-only lines from the final Markdown output. Default is false. 
+	RemoveEmptyLines *bool `json:"RemoveEmptyLines"`
+
+	// Specifies how repeated space characters are preserved to maintain visual alignment. 
+	HandleRepeatedSpaces string `json:"HandleRepeatedSpaces,omitempty"`
+
+	// The format of slide number headers. 
+	SlideNumberFormat string `json:"SlideNumberFormat,omitempty"`
 }
 
 func NewMarkdownExportOptions() *MarkdownExportOptions {
@@ -167,6 +195,13 @@ func (this *MarkdownExportOptions) GetFontSubstRules() []IFontSubstRule {
 
 func (this *MarkdownExportOptions) SetFontSubstRules(newValue []IFontSubstRule) {
 	this.FontSubstRules = newValue
+}
+func (this *MarkdownExportOptions) GetSkipJavaScriptLinks() *bool {
+	return this.SkipJavaScriptLinks
+}
+
+func (this *MarkdownExportOptions) SetSkipJavaScriptLinks(newValue *bool) {
+	this.SkipJavaScriptLinks = newValue
 }
 func (this *MarkdownExportOptions) GetFormat() string {
 	return this.Format
@@ -223,6 +258,27 @@ func (this *MarkdownExportOptions) GetShowHiddenSlides() *bool {
 
 func (this *MarkdownExportOptions) SetShowHiddenSlides(newValue *bool) {
 	this.ShowHiddenSlides = newValue
+}
+func (this *MarkdownExportOptions) GetRemoveEmptyLines() *bool {
+	return this.RemoveEmptyLines
+}
+
+func (this *MarkdownExportOptions) SetRemoveEmptyLines(newValue *bool) {
+	this.RemoveEmptyLines = newValue
+}
+func (this *MarkdownExportOptions) GetHandleRepeatedSpaces() string {
+	return this.HandleRepeatedSpaces
+}
+
+func (this *MarkdownExportOptions) SetHandleRepeatedSpaces(newValue string) {
+	this.HandleRepeatedSpaces = newValue
+}
+func (this *MarkdownExportOptions) GetSlideNumberFormat() string {
+	return this.SlideNumberFormat
+}
+
+func (this *MarkdownExportOptions) SetSlideNumberFormat(newValue string) {
+	this.SlideNumberFormat = newValue
 }
 
 func (this *MarkdownExportOptions) UnmarshalJSON(b []byte) error {
@@ -318,6 +374,17 @@ func (this *MarkdownExportOptions) UnmarshalJSON(b []byte) error {
 				}
 			}
 			this.FontSubstRules = valueForIFontSubstRules
+		}
+	}
+	
+	if valSkipJavaScriptLinks, ok := GetMapValue(objMap, "skipJavaScriptLinks"); ok {
+		if valSkipJavaScriptLinks != nil {
+			var valueForSkipJavaScriptLinks *bool
+			err = json.Unmarshal(*valSkipJavaScriptLinks, &valueForSkipJavaScriptLinks)
+			if err != nil {
+				return err
+			}
+			this.SkipJavaScriptLinks = valueForSkipJavaScriptLinks
 		}
 	}
 	
@@ -424,6 +491,45 @@ func (this *MarkdownExportOptions) UnmarshalJSON(b []byte) error {
 				return err
 			}
 			this.ShowHiddenSlides = valueForShowHiddenSlides
+		}
+	}
+	
+	if valRemoveEmptyLines, ok := GetMapValue(objMap, "removeEmptyLines"); ok {
+		if valRemoveEmptyLines != nil {
+			var valueForRemoveEmptyLines *bool
+			err = json.Unmarshal(*valRemoveEmptyLines, &valueForRemoveEmptyLines)
+			if err != nil {
+				return err
+			}
+			this.RemoveEmptyLines = valueForRemoveEmptyLines
+		}
+	}
+	
+	if valHandleRepeatedSpaces, ok := GetMapValue(objMap, "handleRepeatedSpaces"); ok {
+		if valHandleRepeatedSpaces != nil {
+			var valueForHandleRepeatedSpaces string
+			err = json.Unmarshal(*valHandleRepeatedSpaces, &valueForHandleRepeatedSpaces)
+			if err != nil {
+				var valueForHandleRepeatedSpacesInt int32
+				err = json.Unmarshal(*valHandleRepeatedSpaces, &valueForHandleRepeatedSpacesInt)
+				if err != nil {
+					return err
+				}
+				this.HandleRepeatedSpaces = string(valueForHandleRepeatedSpacesInt)
+			} else {
+				this.HandleRepeatedSpaces = valueForHandleRepeatedSpaces
+			}
+		}
+	}
+	
+	if valSlideNumberFormat, ok := GetMapValue(objMap, "slideNumberFormat"); ok {
+		if valSlideNumberFormat != nil {
+			var valueForSlideNumberFormat string
+			err = json.Unmarshal(*valSlideNumberFormat, &valueForSlideNumberFormat)
+			if err != nil {
+				return err
+			}
+			this.SlideNumberFormat = valueForSlideNumberFormat
 		}
 	}
 

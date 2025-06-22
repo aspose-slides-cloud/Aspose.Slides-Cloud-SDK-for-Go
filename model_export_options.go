@@ -53,6 +53,10 @@ type IExportOptions interface {
 	GetFontSubstRules() []IFontSubstRule
 	SetFontSubstRules(newValue []IFontSubstRule)
 
+	// True to skip hyperlinks with javascript calls when saving the presentation.
+	GetSkipJavaScriptLinks() *bool
+	SetSkipJavaScriptLinks(newValue *bool)
+
 	GetFormat() string
 	SetFormat(newValue string)
 }
@@ -73,6 +77,9 @@ type ExportOptions struct {
 
 	// Gets of sets list of font substitution rules.
 	FontSubstRules []IFontSubstRule `json:"FontSubstRules,omitempty"`
+
+	// True to skip hyperlinks with javascript calls when saving the presentation.
+	SkipJavaScriptLinks *bool `json:"SkipJavaScriptLinks"`
 
 	Format string `json:"Format,omitempty"`
 }
@@ -116,6 +123,13 @@ func (this *ExportOptions) GetFontSubstRules() []IFontSubstRule {
 
 func (this *ExportOptions) SetFontSubstRules(newValue []IFontSubstRule) {
 	this.FontSubstRules = newValue
+}
+func (this *ExportOptions) GetSkipJavaScriptLinks() *bool {
+	return this.SkipJavaScriptLinks
+}
+
+func (this *ExportOptions) SetSkipJavaScriptLinks(newValue *bool) {
+	this.SkipJavaScriptLinks = newValue
 }
 func (this *ExportOptions) GetFormat() string {
 	return this.Format
@@ -218,6 +232,17 @@ func (this *ExportOptions) UnmarshalJSON(b []byte) error {
 				}
 			}
 			this.FontSubstRules = valueForIFontSubstRules
+		}
+	}
+	
+	if valSkipJavaScriptLinks, ok := GetMapValue(objMap, "skipJavaScriptLinks"); ok {
+		if valSkipJavaScriptLinks != nil {
+			var valueForSkipJavaScriptLinks *bool
+			err = json.Unmarshal(*valSkipJavaScriptLinks, &valueForSkipJavaScriptLinks)
+			if err != nil {
+				return err
+			}
+			this.SkipJavaScriptLinks = valueForSkipJavaScriptLinks
 		}
 	}
 	

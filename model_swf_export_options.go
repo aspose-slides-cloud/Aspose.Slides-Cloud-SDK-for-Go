@@ -53,6 +53,10 @@ type ISwfExportOptions interface {
 	GetFontSubstRules() []IFontSubstRule
 	SetFontSubstRules(newValue []IFontSubstRule)
 
+	// True to skip hyperlinks with javascript calls when saving the presentation.
+	GetSkipJavaScriptLinks() *bool
+	SetSkipJavaScriptLinks(newValue *bool)
+
 	// Export format.
 	GetFormat() string
 	SetFormat(newValue string)
@@ -117,25 +121,9 @@ type ISwfExportOptions interface {
 	GetJpegQuality() int32
 	SetJpegQuality(newValue int32)
 
-	// Gets or sets the position of the notes on the page.
-	GetNotesPosition() string
-	SetNotesPosition(newValue string)
-
-	// Gets or sets the position of the comments on the page.
-	GetCommentsPosition() string
-	SetCommentsPosition(newValue string)
-
-	// Gets or sets the width of the comment output area in pixels (Applies only if comments are displayed on the right).
-	GetCommentsAreaWidth() int32
-	SetCommentsAreaWidth(newValue int32)
-
-	// Gets or sets the color of comments area (Applies only if comments are displayed on the right).
-	GetCommentsAreaColor() string
-	SetCommentsAreaColor(newValue string)
-
-	// True if comments that have no author are displayed. (Applies only if comments are displayed).
-	GetShowCommentsByNoAuthor() *bool
-	SetShowCommentsByNoAuthor(newValue *bool)
+	// Slides layouting options
+	GetSlidesLayoutOptions() ISlidesLayoutOptions
+	SetSlidesLayoutOptions(newValue ISlidesLayoutOptions)
 }
 
 type SwfExportOptions struct {
@@ -154,6 +142,9 @@ type SwfExportOptions struct {
 
 	// Gets of sets list of font substitution rules.
 	FontSubstRules []IFontSubstRule `json:"FontSubstRules,omitempty"`
+
+	// True to skip hyperlinks with javascript calls when saving the presentation.
+	SkipJavaScriptLinks *bool `json:"SkipJavaScriptLinks"`
 
 	// Export format.
 	Format string `json:"Format,omitempty"`
@@ -203,20 +194,8 @@ type SwfExportOptions struct {
 	// Specifies the quality of JPEG images. Default is 95.
 	JpegQuality int32 `json:"JpegQuality,omitempty"`
 
-	// Gets or sets the position of the notes on the page.
-	NotesPosition string `json:"NotesPosition,omitempty"`
-
-	// Gets or sets the position of the comments on the page.
-	CommentsPosition string `json:"CommentsPosition,omitempty"`
-
-	// Gets or sets the width of the comment output area in pixels (Applies only if comments are displayed on the right).
-	CommentsAreaWidth int32 `json:"CommentsAreaWidth,omitempty"`
-
-	// Gets or sets the color of comments area (Applies only if comments are displayed on the right).
-	CommentsAreaColor string `json:"CommentsAreaColor,omitempty"`
-
-	// True if comments that have no author are displayed. (Applies only if comments are displayed).
-	ShowCommentsByNoAuthor *bool `json:"ShowCommentsByNoAuthor"`
+	// Slides layouting options
+	SlidesLayoutOptions ISlidesLayoutOptions `json:"SlidesLayoutOptions,omitempty"`
 }
 
 func NewSwfExportOptions() *SwfExportOptions {
@@ -258,6 +237,13 @@ func (this *SwfExportOptions) GetFontSubstRules() []IFontSubstRule {
 
 func (this *SwfExportOptions) SetFontSubstRules(newValue []IFontSubstRule) {
 	this.FontSubstRules = newValue
+}
+func (this *SwfExportOptions) GetSkipJavaScriptLinks() *bool {
+	return this.SkipJavaScriptLinks
+}
+
+func (this *SwfExportOptions) SetSkipJavaScriptLinks(newValue *bool) {
+	this.SkipJavaScriptLinks = newValue
 }
 func (this *SwfExportOptions) GetFormat() string {
 	return this.Format
@@ -371,40 +357,12 @@ func (this *SwfExportOptions) GetJpegQuality() int32 {
 func (this *SwfExportOptions) SetJpegQuality(newValue int32) {
 	this.JpegQuality = newValue
 }
-func (this *SwfExportOptions) GetNotesPosition() string {
-	return this.NotesPosition
+func (this *SwfExportOptions) GetSlidesLayoutOptions() ISlidesLayoutOptions {
+	return this.SlidesLayoutOptions
 }
 
-func (this *SwfExportOptions) SetNotesPosition(newValue string) {
-	this.NotesPosition = newValue
-}
-func (this *SwfExportOptions) GetCommentsPosition() string {
-	return this.CommentsPosition
-}
-
-func (this *SwfExportOptions) SetCommentsPosition(newValue string) {
-	this.CommentsPosition = newValue
-}
-func (this *SwfExportOptions) GetCommentsAreaWidth() int32 {
-	return this.CommentsAreaWidth
-}
-
-func (this *SwfExportOptions) SetCommentsAreaWidth(newValue int32) {
-	this.CommentsAreaWidth = newValue
-}
-func (this *SwfExportOptions) GetCommentsAreaColor() string {
-	return this.CommentsAreaColor
-}
-
-func (this *SwfExportOptions) SetCommentsAreaColor(newValue string) {
-	this.CommentsAreaColor = newValue
-}
-func (this *SwfExportOptions) GetShowCommentsByNoAuthor() *bool {
-	return this.ShowCommentsByNoAuthor
-}
-
-func (this *SwfExportOptions) SetShowCommentsByNoAuthor(newValue *bool) {
-	this.ShowCommentsByNoAuthor = newValue
+func (this *SwfExportOptions) SetSlidesLayoutOptions(newValue ISlidesLayoutOptions) {
+	this.SlidesLayoutOptions = newValue
 }
 
 func (this *SwfExportOptions) UnmarshalJSON(b []byte) error {
@@ -500,6 +458,17 @@ func (this *SwfExportOptions) UnmarshalJSON(b []byte) error {
 				}
 			}
 			this.FontSubstRules = valueForIFontSubstRules
+		}
+	}
+	
+	if valSkipJavaScriptLinks, ok := GetMapValue(objMap, "skipJavaScriptLinks"); ok {
+		if valSkipJavaScriptLinks != nil {
+			var valueForSkipJavaScriptLinks *bool
+			err = json.Unmarshal(*valSkipJavaScriptLinks, &valueForSkipJavaScriptLinks)
+			if err != nil {
+				return err
+			}
+			this.SkipJavaScriptLinks = valueForSkipJavaScriptLinks
 		}
 	}
 	
@@ -679,70 +648,25 @@ func (this *SwfExportOptions) UnmarshalJSON(b []byte) error {
 		}
 	}
 	
-	if valNotesPosition, ok := GetMapValue(objMap, "notesPosition"); ok {
-		if valNotesPosition != nil {
-			var valueForNotesPosition string
-			err = json.Unmarshal(*valNotesPosition, &valueForNotesPosition)
-			if err != nil {
-				var valueForNotesPositionInt int32
-				err = json.Unmarshal(*valNotesPosition, &valueForNotesPositionInt)
-				if err != nil {
-					return err
-				}
-				this.NotesPosition = string(valueForNotesPositionInt)
-			} else {
-				this.NotesPosition = valueForNotesPosition
-			}
-		}
-	}
-	
-	if valCommentsPosition, ok := GetMapValue(objMap, "commentsPosition"); ok {
-		if valCommentsPosition != nil {
-			var valueForCommentsPosition string
-			err = json.Unmarshal(*valCommentsPosition, &valueForCommentsPosition)
-			if err != nil {
-				var valueForCommentsPositionInt int32
-				err = json.Unmarshal(*valCommentsPosition, &valueForCommentsPositionInt)
-				if err != nil {
-					return err
-				}
-				this.CommentsPosition = string(valueForCommentsPositionInt)
-			} else {
-				this.CommentsPosition = valueForCommentsPosition
-			}
-		}
-	}
-	
-	if valCommentsAreaWidth, ok := GetMapValue(objMap, "commentsAreaWidth"); ok {
-		if valCommentsAreaWidth != nil {
-			var valueForCommentsAreaWidth int32
-			err = json.Unmarshal(*valCommentsAreaWidth, &valueForCommentsAreaWidth)
+	if valSlidesLayoutOptions, ok := GetMapValue(objMap, "slidesLayoutOptions"); ok {
+		if valSlidesLayoutOptions != nil {
+			var valueForSlidesLayoutOptions SlidesLayoutOptions
+			err = json.Unmarshal(*valSlidesLayoutOptions, &valueForSlidesLayoutOptions)
 			if err != nil {
 				return err
 			}
-			this.CommentsAreaWidth = valueForCommentsAreaWidth
-		}
-	}
-	
-	if valCommentsAreaColor, ok := GetMapValue(objMap, "commentsAreaColor"); ok {
-		if valCommentsAreaColor != nil {
-			var valueForCommentsAreaColor string
-			err = json.Unmarshal(*valCommentsAreaColor, &valueForCommentsAreaColor)
+			vObject, err := createObjectForType("SlidesLayoutOptions", *valSlidesLayoutOptions)
 			if err != nil {
 				return err
 			}
-			this.CommentsAreaColor = valueForCommentsAreaColor
-		}
-	}
-	
-	if valShowCommentsByNoAuthor, ok := GetMapValue(objMap, "showCommentsByNoAuthor"); ok {
-		if valShowCommentsByNoAuthor != nil {
-			var valueForShowCommentsByNoAuthor *bool
-			err = json.Unmarshal(*valShowCommentsByNoAuthor, &valueForShowCommentsByNoAuthor)
+			err = json.Unmarshal(*valSlidesLayoutOptions, &vObject)
 			if err != nil {
 				return err
 			}
-			this.ShowCommentsByNoAuthor = valueForShowCommentsByNoAuthor
+			vInterfaceObject, ok := vObject.(ISlidesLayoutOptions)
+			if ok {
+				this.SlidesLayoutOptions = vInterfaceObject
+			}
 		}
 	}
 

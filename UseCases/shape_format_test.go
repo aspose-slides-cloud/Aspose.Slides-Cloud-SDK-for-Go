@@ -28,9 +28,11 @@
 package usecasetests
 
 import (
+	"encoding/base64"
+	"io/ioutil"
 	"testing"
 
-	slidescloud "github.com/aspose-slides-cloud/aspose-slides-cloud-go/v24"
+	slidescloud "github.com/aspose-slides-cloud/aspose-slides-cloud-go/v25"
 )
 
 /*
@@ -130,6 +132,60 @@ func TestShapeFormatFill(t *testing.T) {
 	}
 	if result.GetFillFormat().(slidescloud.ISolidFill).GetColor() != dto.GetFillFormat().(slidescloud.ISolidFill).GetColor() {
 		t.Errorf("Wrong fill color. Expected %v but was %v.", dto.GetFillFormat().(slidescloud.ISolidFill).GetColor(), result.GetFillFormat().(slidescloud.ISolidFill).GetColor())
+		return
+	}
+}
+
+/*
+   Test for shape picture fill format
+*/
+func TestShapeFormatPictureFill(t *testing.T) {
+	var shapeIndex int32 = 1
+
+	c, e := GetApiClient()
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	_, e = c.SlidesApi.CopyFile(tempFilePath, filePath, "", "", "")
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+
+	dto := slidescloud.NewShape()
+	fillFormat := slidescloud.NewPictureFill()
+	picture, e := ioutil.ReadFile(localFolder + "/watermark.png")
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	fillFormat.Base64Data = base64.StdEncoding.EncodeToString(picture)
+	fillFormat.Resolution = 150
+	dto.FillFormat = fillFormat
+	result, _, e := c.SlidesApi.UpdateShape(fileName, slideIndex, shapeIndex, dto, password, folderName, "", "")
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	_, ok := result.(slidescloud.IShape)
+	if !ok {
+		t.Errorf("Wrong shape type.")
+		return
+	}
+	result, _, e = c.SlidesApi.GetShape(fileName, slideIndex, shapeIndex, password, folderName, "", "")
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	_, ok = result.(slidescloud.IShape)
+	if !ok {
+		t.Errorf("Wrong shape type.")
+		return
+	}
+	_, ok = result.GetFillFormat().(slidescloud.IPictureFill)
+	if !ok {
+		t.Errorf("Wrong fill type.")
 		return
 	}
 }

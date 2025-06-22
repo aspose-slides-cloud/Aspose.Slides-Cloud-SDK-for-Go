@@ -53,6 +53,10 @@ type IHtmlExportOptions interface {
 	GetFontSubstRules() []IFontSubstRule
 	SetFontSubstRules(newValue []IFontSubstRule)
 
+	// True to skip hyperlinks with javascript calls when saving the presentation.
+	GetSkipJavaScriptLinks() *bool
+	SetSkipJavaScriptLinks(newValue *bool)
+
 	// Export format.
 	GetFormat() string
 	SetFormat(newValue string)
@@ -88,6 +92,10 @@ type IHtmlExportOptions interface {
 	// Slides layouting options
 	GetSlidesLayoutOptions() ISlidesLayoutOptions
 	SetSlidesLayoutOptions(newValue ISlidesLayoutOptions)
+
+	// true to disable ligatures in the rendered output.
+	GetDisableFontLigatures() *bool
+	SetDisableFontLigatures(newValue *bool)
 }
 
 type HtmlExportOptions struct {
@@ -106,6 +114,9 @@ type HtmlExportOptions struct {
 
 	// Gets of sets list of font substitution rules.
 	FontSubstRules []IFontSubstRule `json:"FontSubstRules,omitempty"`
+
+	// True to skip hyperlinks with javascript calls when saving the presentation.
+	SkipJavaScriptLinks *bool `json:"SkipJavaScriptLinks"`
 
 	// Export format.
 	Format string `json:"Format,omitempty"`
@@ -133,6 +144,9 @@ type HtmlExportOptions struct {
 
 	// Slides layouting options
 	SlidesLayoutOptions ISlidesLayoutOptions `json:"SlidesLayoutOptions,omitempty"`
+
+	// true to disable ligatures in the rendered output.
+	DisableFontLigatures *bool `json:"DisableFontLigatures"`
 }
 
 func NewHtmlExportOptions() *HtmlExportOptions {
@@ -174,6 +188,13 @@ func (this *HtmlExportOptions) GetFontSubstRules() []IFontSubstRule {
 
 func (this *HtmlExportOptions) SetFontSubstRules(newValue []IFontSubstRule) {
 	this.FontSubstRules = newValue
+}
+func (this *HtmlExportOptions) GetSkipJavaScriptLinks() *bool {
+	return this.SkipJavaScriptLinks
+}
+
+func (this *HtmlExportOptions) SetSkipJavaScriptLinks(newValue *bool) {
+	this.SkipJavaScriptLinks = newValue
 }
 func (this *HtmlExportOptions) GetFormat() string {
 	return this.Format
@@ -237,6 +258,13 @@ func (this *HtmlExportOptions) GetSlidesLayoutOptions() ISlidesLayoutOptions {
 
 func (this *HtmlExportOptions) SetSlidesLayoutOptions(newValue ISlidesLayoutOptions) {
 	this.SlidesLayoutOptions = newValue
+}
+func (this *HtmlExportOptions) GetDisableFontLigatures() *bool {
+	return this.DisableFontLigatures
+}
+
+func (this *HtmlExportOptions) SetDisableFontLigatures(newValue *bool) {
+	this.DisableFontLigatures = newValue
 }
 
 func (this *HtmlExportOptions) UnmarshalJSON(b []byte) error {
@@ -332,6 +360,17 @@ func (this *HtmlExportOptions) UnmarshalJSON(b []byte) error {
 				}
 			}
 			this.FontSubstRules = valueForIFontSubstRules
+		}
+	}
+	
+	if valSkipJavaScriptLinks, ok := GetMapValue(objMap, "skipJavaScriptLinks"); ok {
+		if valSkipJavaScriptLinks != nil {
+			var valueForSkipJavaScriptLinks *bool
+			err = json.Unmarshal(*valSkipJavaScriptLinks, &valueForSkipJavaScriptLinks)
+			if err != nil {
+				return err
+			}
+			this.SkipJavaScriptLinks = valueForSkipJavaScriptLinks
 		}
 	}
 	
@@ -448,6 +487,17 @@ func (this *HtmlExportOptions) UnmarshalJSON(b []byte) error {
 			if ok {
 				this.SlidesLayoutOptions = vInterfaceObject
 			}
+		}
+	}
+	
+	if valDisableFontLigatures, ok := GetMapValue(objMap, "disableFontLigatures"); ok {
+		if valDisableFontLigatures != nil {
+			var valueForDisableFontLigatures *bool
+			err = json.Unmarshal(*valDisableFontLigatures, &valueForDisableFontLigatures)
+			if err != nil {
+				return err
+			}
+			this.DisableFontLigatures = valueForDisableFontLigatures
 		}
 	}
 

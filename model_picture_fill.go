@@ -93,6 +93,14 @@ type IPictureFill interface {
 	GetSvgData() string
 	SetSvgData(newValue string)
 
+	// true to delete picture cropped areas on save.
+	GetDeletePictureCroppedAreas() *bool
+	SetDeletePictureCroppedAreas(newValue *bool)
+
+	// true to compress the picture image with the specified resolution (in dpi) on save.
+	GetResolution() float64
+	SetResolution(newValue float64)
+
 	// Fill mode.
 	GetPictureFillMode() string
 	SetPictureFillMode(newValue string)
@@ -148,6 +156,12 @@ type PictureFill struct {
 
 	// SVG image data.
 	SvgData string `json:"SvgData,omitempty"`
+
+	// true to delete picture cropped areas on save.
+	DeletePictureCroppedAreas *bool `json:"DeletePictureCroppedAreas"`
+
+	// true to compress the picture image with the specified resolution (in dpi) on save.
+	Resolution float64 `json:"Resolution,omitempty"`
 
 	// Fill mode.
 	PictureFillMode string `json:"PictureFillMode"`
@@ -267,6 +281,20 @@ func (this *PictureFill) GetSvgData() string {
 
 func (this *PictureFill) SetSvgData(newValue string) {
 	this.SvgData = newValue
+}
+func (this *PictureFill) GetDeletePictureCroppedAreas() *bool {
+	return this.DeletePictureCroppedAreas
+}
+
+func (this *PictureFill) SetDeletePictureCroppedAreas(newValue *bool) {
+	this.DeletePictureCroppedAreas = newValue
+}
+func (this *PictureFill) GetResolution() float64 {
+	return this.Resolution
+}
+
+func (this *PictureFill) SetResolution(newValue float64) {
+	this.Resolution = newValue
 }
 func (this *PictureFill) GetPictureFillMode() string {
 	return this.PictureFillMode
@@ -481,6 +509,28 @@ func (this *PictureFill) UnmarshalJSON(b []byte) error {
 				return err
 			}
 			this.SvgData = valueForSvgData
+		}
+	}
+	
+	if valDeletePictureCroppedAreas, ok := GetMapValue(objMap, "deletePictureCroppedAreas"); ok {
+		if valDeletePictureCroppedAreas != nil {
+			var valueForDeletePictureCroppedAreas *bool
+			err = json.Unmarshal(*valDeletePictureCroppedAreas, &valueForDeletePictureCroppedAreas)
+			if err != nil {
+				return err
+			}
+			this.DeletePictureCroppedAreas = valueForDeletePictureCroppedAreas
+		}
+	}
+	
+	if valResolution, ok := GetMapValue(objMap, "resolution"); ok {
+		if valResolution != nil {
+			var valueForResolution float64
+			err = json.Unmarshal(*valResolution, &valueForResolution)
+			if err != nil {
+				return err
+			}
+			this.Resolution = valueForResolution
 		}
 	}
 	this.PictureFillMode = "Tile"

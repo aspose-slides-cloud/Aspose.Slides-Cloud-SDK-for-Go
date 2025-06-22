@@ -102,7 +102,7 @@ func TestImagesDownloadStorage(t *testing.T) {
 		downloadCount++
 	}
 
-	pngResult, _, e := c.SlidesApi.DownloadImages(fileName, "png", password, folderName, "")
+	pngResult, _, e := c.SlidesApi.DownloadImages(fileName, "png", password, folderName, "", nil)
 	if e != nil {
 		t.Errorf("Error: %v.", e)
 		return
@@ -168,7 +168,7 @@ func TestImagesDownloadRequest(t *testing.T) {
 		downloadCount++
 	}
 
-	pngResult, _, e := c.SlidesApi.DownloadImagesOnline(source, "png", password)
+	pngResult, _, e := c.SlidesApi.DownloadImagesOnline(source, "png", password, nil)
 	if e != nil {
 		t.Errorf("Error: %v.", e)
 		return
@@ -224,7 +224,7 @@ func TestImageDownloadStorage(t *testing.T) {
 		return
 	}
 
-	pngResult, _, e := c.SlidesApi.DownloadImage(fileName, slideIndex, "png", password, folderName, "")
+	pngResult, _, e := c.SlidesApi.DownloadImage(fileName, slideIndex, "png", password, folderName, "", nil)
 	if e != nil {
 		t.Errorf("Error: %v.", e)
 		return
@@ -266,7 +266,7 @@ func TestImageDownloadRequest(t *testing.T) {
 		return
 	}
 
-	pngResult, _, e := c.SlidesApi.DownloadImageOnline(source, slideIndex, "png", password)
+	pngResult, _, e := c.SlidesApi.DownloadImageOnline(source, slideIndex, "png", password, nil)
 	if e != nil {
 		t.Errorf("Error: %v.", e)
 		return
@@ -278,6 +278,94 @@ func TestImageDownloadRequest(t *testing.T) {
 	}
 	if downloadStat.Size() == pngStat.Size() {
 		t.Errorf("Wrong file size. Expected not %v but was %v.", downloadStat.Size(), pngStat.Size())
+		return
+	}
+}
+
+/*
+   Test for download image with quality option
+*/
+func TestImageDownloadQuality(t *testing.T) {
+	c, e := GetApiClient()
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	_, e = c.SlidesApi.CopyFile(tempFilePath, filePath, "", "", "")
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+
+    var quality int32 = 100
+	goodResult, _, e := c.SlidesApi.DownloadImage(fileName, slideIndex, "jpeg", password, folderName, "", &quality)
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	goodStat, e := os.Stat(goodResult.Name())
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+
+    quality = 50
+	badResult, _, e := c.SlidesApi.DownloadImage(fileName, slideIndex, "jpeg", password, folderName, "", &quality)
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	badStat, e := os.Stat(badResult.Name())
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	if goodStat.Size() <= badStat.Size() {
+		t.Errorf("Wrong file size. Expected less than %v but was %v.", goodStat.Size(), badStat.Size())
+		return
+	}
+}
+
+/*
+   Test for download image with quality option with no effect (format other than jpeg)
+*/
+func TestImageDownloadQualityUseless(t *testing.T) {
+	c, e := GetApiClient()
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	_, e = c.SlidesApi.CopyFile(tempFilePath, filePath, "", "", "")
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+
+    var quality int32 = 100
+	goodResult, _, e := c.SlidesApi.DownloadImage(fileName, slideIndex, "png", password, folderName, "", &quality)
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	goodStat, e := os.Stat(goodResult.Name())
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+
+    quality = 50
+	badResult, _, e := c.SlidesApi.DownloadImage(fileName, slideIndex, "png", password, folderName, "", &quality)
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	badStat, e := os.Stat(badResult.Name())
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	if goodStat.Size() != badStat.Size() {
+		t.Errorf("Wrong file size. Expected %v but was %v.", goodStat.Size(), badStat.Size())
 		return
 	}
 }

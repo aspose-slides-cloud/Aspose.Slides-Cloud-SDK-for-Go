@@ -31,7 +31,7 @@ import (
 	"io/ioutil"
 	"testing"
 
-	slidescloud "github.com/aspose-slides-cloud/aspose-slides-cloud-go/v24"
+	slidescloud "github.com/aspose-slides-cloud/aspose-slides-cloud-go/v25"
 )
 
 /*
@@ -266,7 +266,7 @@ func TestMergeOnlineUrl(t *testing.T) {
 	presentation1.Password = password
 	presentation2 := slidescloud.NewPresentationToMerge()
 	presentation2.Source = "Url"
-	presentation2.Path = "https://drive.google.com/uc?export=download&id=1ycMzd7e--Ro9H8eH2GL5fPP7-2HjX4My"
+	presentation2.Path = "https://www.dropbox.com/scl/fi/nz3yt2wpg4eugiw12bz3g/info.pptx?rlkey=wju4vbi6h46q8733tzzvfgufz&e=1&st=pqt66x86&dl=1"
 	presentation2.Slides = []int32{1}
 	request.Presentations = []slidescloud.IPresentationToMerge{presentation1, presentation2}
 
