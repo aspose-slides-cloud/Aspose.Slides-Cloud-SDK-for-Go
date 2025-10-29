@@ -34,9 +34,9 @@ import (
 )
 
 /*
-   Test for video caption tracks
+   Test for audio caption tracks
 */
-func TestVideoCaptionTracks(t *testing.T) {
+func TestAudioCaptionTracks(t *testing.T) {
     var slideIndex int32 = 3
     var shapeIndex int32 = 3
     track1Label := "track1"
@@ -55,7 +55,7 @@ func TestVideoCaptionTracks(t *testing.T) {
 		return
 	}
 
-	dto := slidescloud.NewVideoFrame()
+	dto := slidescloud.NewAudioFrame()
 	dto.Base64Data = "bXAzc2FtcGxl"
 	_, _, e = c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, password, folderName, "", "")
 	if e != nil {

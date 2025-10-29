@@ -55,13 +55,34 @@ func TestImagesGet(t *testing.T) {
 		return
 	}
 
-	slideResult, _, e := c.SlidesApi.GetSlideImages(fileName, 1, password, folderName, "")
+	slideResult, _, e := c.SlidesApi.GetSlideImages(fileName, 1, nil, "", password, folderName, "")
 	if e != nil {
 		t.Errorf("Error: %v.", e)
 		return
 	}
 	if len(slideResult.GetList()) >= len(presentationResult.GetList()) {
 		t.Errorf("Wrong image count. Expected less than %v but was %v.", len(presentationResult.GetList()), len(slideResult.GetList()))
+		return
+	}
+
+	var shapeIndex int32 = 2
+	shapeResult, _, e := c.SlidesApi.GetSlideImages(fileName, 2, &shapeIndex, "", password, folderName, "")
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	if len(shapeResult.GetList()) != 1 {
+		t.Errorf("Wrong image count. Expected %v but was %v.", 1, len(shapeResult.GetList()))
+		return
+	}
+
+	altResult, _, e := c.SlidesApi.GetSlideImages(fileName, 2, nil, "title", password, folderName, "")
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	if len(shapeResult.GetList()) != 0 {
+		t.Errorf("Wrong image count. Expected %v but was %v.", 0, len(altResult.GetList()))
 		return
 	}
 }

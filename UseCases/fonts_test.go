@@ -166,24 +166,18 @@ func TestSetEmbeddedFontOnline(t *testing.T) {
 }
 
 /*
-   Test for set embedded font from request
+   Test for set embedded fonts
 */
-func TestSetEmbeddedFontFromRequest(t *testing.T) {
+func TestSetEmbeddedFonts(t *testing.T) {
 	c, e := GetApiClient()
 	if e != nil {
 		t.Errorf("Error: %v.", e)
 		return
 	}
-	document, e := ioutil.ReadFile(localFolder + "/calibri.ttf")
 
-	_, e = c.SlidesApi.CopyFile(tempFilePath, filePath, "", "", "")
-	if e != nil {
-		t.Errorf("Error: %v.", e)
-		return
-	}
-
+	fonts := []string{ fontName }
 	var onlyUsed bool = false
-	response, _, e := c.SlidesApi.SetEmbeddedFontFromRequest(document, fileName, &onlyUsed, password, folderName, "")
+	response, _, e := c.SlidesApi.SetEmbeddedFonts(fileName, nil, fonts, &onlyUsed, password, folderName, "")
 	if e != nil {
 		t.Errorf("Error: %v.", e)
 		return
@@ -197,6 +191,71 @@ func TestSetEmbeddedFontFromRequest(t *testing.T) {
 	fontName := "Calibri"
 	if response.GetList()[2].GetFontName() != fontName {
 		t.Errorf("Expected %v, but was %v", fontName, response.GetList()[2].GetFontName())
+		return
+	}
+}
+
+/*
+   Test for set embedded font from request
+*/
+func TestSetEmbeddedFontsFromRequest(t *testing.T) {
+	c, e := GetApiClient()
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	fontFile, e := ioutil.ReadFile(localFolder + "/calibri.ttf")
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+
+	_, e = c.SlidesApi.CopyFile(tempFilePath, filePath, "", "", "")
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+
+	var onlyUsed bool = false
+	response, _, e := c.SlidesApi.SetEmbeddedFonts(fileName, [][]byte{ fontFile }, nil, &onlyUsed, password, folderName, "")
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+
+	isEmbedded := response.GetList()[2].GetIsEmbedded()
+	if isEmbedded == nil || !*isEmbedded {
+		t.Errorf("Expected %v, but was %v", true, response.GetList()[2].GetIsEmbedded())
+		return
+	}
+	fontName := "Calibri"
+	if response.GetList()[2].GetFontName() != fontName {
+		t.Errorf("Expected %v, but was %v", fontName, response.GetList()[2].GetFontName())
+		return
+	}
+}
+
+/*
+   Test for set embedded font from request
+*/
+func TestSetEmbeddedFontsOnline(t *testing.T) {
+	c, e := GetApiClient()
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+
+	document, e := ioutil.ReadFile(localTestFile)
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+
+	fonts := []string{ fontName }
+	var onlyUsed bool = false
+	_, _, e = c.SlidesApi.SetEmbeddedFontsOnline(document, nil, fonts, &onlyUsed, password)
+	if e != nil {
+		t.Errorf("Error: %v.", e)
 		return
 	}
 }
@@ -223,7 +282,7 @@ func TestSetEmbeddedFontFromRequestOnline(t *testing.T) {
 	}
 
 	var onlyUsed bool = false
-	_, _, e = c.SlidesApi.SetEmbeddedFontFromRequestOnline(document, fontFile, &onlyUsed, password)
+	_, _, e = c.SlidesApi.SetEmbeddedFontsOnline(document, [][]byte{ fontFile }, nil, &onlyUsed, password)
 	if e != nil {
 		t.Errorf("Error: %v.", e)
 		return
