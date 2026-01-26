@@ -30,7 +30,7 @@ package usecasetests
 import (
 	"testing"
 
-	slidescloud "github.com/aspose-slides-cloud/aspose-slides-cloud-go/v25"
+	slidescloud "github.com/aspose-slides-cloud/aspose-slides-cloud-go/v26"
 )
 
 var animatedShapeIndex int32 = 3

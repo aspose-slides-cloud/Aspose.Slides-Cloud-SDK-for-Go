@@ -148,6 +148,10 @@ type IPortionFormat interface {
 	// Returns or sets the complex script font info.
 	GetComplexScriptFont() string
 	SetComplexScriptFont(newValue string)
+
+	// true to enable spell checking for the portion.
+	GetSpellCheck() *bool
+	SetSpellCheck(newValue *bool)
 }
 
 type PortionFormat struct {
@@ -238,6 +242,9 @@ type PortionFormat struct {
 
 	// Returns or sets the complex script font info.
 	ComplexScriptFont string `json:"ComplexScriptFont,omitempty"`
+
+	// true to enable spell checking for the portion.
+	SpellCheck *bool `json:"SpellCheck"`
 }
 
 func NewPortionFormat() *PortionFormat {
@@ -447,6 +454,13 @@ func (this *PortionFormat) GetComplexScriptFont() string {
 
 func (this *PortionFormat) SetComplexScriptFont(newValue string) {
 	this.ComplexScriptFont = newValue
+}
+func (this *PortionFormat) GetSpellCheck() *bool {
+	return this.SpellCheck
+}
+
+func (this *PortionFormat) SetSpellCheck(newValue *bool) {
+	this.SpellCheck = newValue
 }
 
 func (this *PortionFormat) UnmarshalJSON(b []byte) error {
@@ -909,6 +923,17 @@ func (this *PortionFormat) UnmarshalJSON(b []byte) error {
 				return err
 			}
 			this.ComplexScriptFont = valueForComplexScriptFont
+		}
+	}
+	
+	if valSpellCheck, ok := GetMapValue(objMap, "spellCheck"); ok {
+		if valSpellCheck != nil {
+			var valueForSpellCheck *bool
+			err = json.Unmarshal(*valSpellCheck, &valueForSpellCheck)
+			if err != nil {
+				return err
+			}
+			this.SpellCheck = valueForSpellCheck
 		}
 	}
 

@@ -109,6 +109,10 @@ type IPortion interface {
 	GetKumimoji() string
 	SetKumimoji(newValue string)
 
+	// true to enable spell checking for the portion.
+	GetSpellCheck() *bool
+	SetSpellCheck(newValue *bool)
+
 	// Proving language ID.
 	GetLanguageId() string
 	SetLanguageId(newValue string)
@@ -224,6 +228,9 @@ type Portion struct {
 
 	// True if numbers should ignore East-Asian specific vertical text layout.
 	Kumimoji string `json:"Kumimoji,omitempty"`
+
+	// true to enable spell checking for the portion.
+	SpellCheck *bool `json:"SpellCheck"`
 
 	// Proving language ID.
 	LanguageId string `json:"LanguageId,omitempty"`
@@ -405,6 +412,13 @@ func (this *Portion) GetKumimoji() string {
 
 func (this *Portion) SetKumimoji(newValue string) {
 	this.Kumimoji = newValue
+}
+func (this *Portion) GetSpellCheck() *bool {
+	return this.SpellCheck
+}
+
+func (this *Portion) SetSpellCheck(newValue *bool) {
+	this.SpellCheck = newValue
 }
 func (this *Portion) GetLanguageId() string {
 	return this.LanguageId
@@ -802,6 +816,17 @@ func (this *Portion) UnmarshalJSON(b []byte) error {
 			} else {
 				this.Kumimoji = valueForKumimoji
 			}
+		}
+	}
+	
+	if valSpellCheck, ok := GetMapValue(objMap, "spellCheck"); ok {
+		if valSpellCheck != nil {
+			var valueForSpellCheck *bool
+			err = json.Unmarshal(*valSpellCheck, &valueForSpellCheck)
+			if err != nil {
+				return err
+			}
+			this.SpellCheck = valueForSpellCheck
 		}
 	}
 	

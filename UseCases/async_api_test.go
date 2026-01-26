@@ -33,7 +33,7 @@ import (
 	"testing"
 	"time"
 
-	slidescloud "github.com/aspose-slides-cloud/aspose-slides-cloud-go/v25"
+	slidescloud "github.com/aspose-slides-cloud/aspose-slides-cloud-go/v26"
 )
 
 var sleepTimeout int32 = 3

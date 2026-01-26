@@ -551,6 +551,10 @@ func init() {
 	typeRegistry["PdfImportOptions"] = reflect.TypeOf(PdfImportOptions{})
 	
 	typeDeterminers["PdfImportOptions"] = make(map[string]string)
+	typeRegistry["PhantomElement"] = reflect.TypeOf(PhantomElement{})
+	derivedTypes["PhantomElement"] = "MathElement"
+	typeDeterminers["PhantomElement"] = make(map[string]string)
+	typeDeterminers["PhantomElement"]["Type"] = "Phantom"
 	typeRegistry["PictureFill"] = reflect.TypeOf(PictureFill{})
 	derivedTypes["PictureFill"] = "FillFormat"
 	typeDeterminers["PictureFill"] = make(map[string]string)

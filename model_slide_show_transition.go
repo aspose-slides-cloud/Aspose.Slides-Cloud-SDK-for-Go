@@ -128,6 +128,10 @@ type ISlideShowTransition interface {
 	// Spokes.
 	GetSpokes() int32
 	SetSpokes(newValue int32)
+
+	// The duration of the slide transition effect in milliseconds. If not set, the duration is determined automatically based on Speed and Type values.
+	GetDuration() int32
+	SetDuration(newValue int32)
 }
 
 type SlideShowTransition struct {
@@ -203,6 +207,9 @@ type SlideShowTransition struct {
 
 	// Spokes.
 	Spokes int32 `json:"Spokes,omitempty"`
+
+	// The duration of the slide transition effect in milliseconds. If not set, the duration is determined automatically based on Speed and Type values.
+	Duration int32 `json:"Duration,omitempty"`
 }
 
 func NewSlideShowTransition() *SlideShowTransition {
@@ -377,6 +384,13 @@ func (this *SlideShowTransition) GetSpokes() int32 {
 
 func (this *SlideShowTransition) SetSpokes(newValue int32) {
 	this.Spokes = newValue
+}
+func (this *SlideShowTransition) GetDuration() int32 {
+	return this.Duration
+}
+
+func (this *SlideShowTransition) SetDuration(newValue int32) {
+	this.Duration = newValue
 }
 
 func (this *SlideShowTransition) UnmarshalJSON(b []byte) error {
@@ -731,6 +745,17 @@ func (this *SlideShowTransition) UnmarshalJSON(b []byte) error {
 				return err
 			}
 			this.Spokes = valueForSpokes
+		}
+	}
+	
+	if valDuration, ok := GetMapValue(objMap, "duration"); ok {
+		if valDuration != nil {
+			var valueForDuration int32
+			err = json.Unmarshal(*valDuration, &valueForDuration)
+			if err != nil {
+				return err
+			}
+			this.Duration = valueForDuration
 		}
 	}
 
