@@ -31,7 +31,7 @@ import (
 	"io/ioutil"
 	"testing"
 
-	slidescloud "github.com/aspose-slides-cloud/aspose-slides-cloud-go/v26"
+	slidescloud "github.com/aspose-slides-cloud/Aspose.Slides-Cloud-SDK-for-Go/v26"
 )
 
 /*
