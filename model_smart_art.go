@@ -128,6 +128,10 @@ type ISmartArt interface {
 	// The state of the SmartArt diagram with regard to (left-to-right) LTR or (right-to-left) RTL, if the diagram supports reversal.
 	GetIsReversed() *bool
 	SetIsReversed(newValue *bool)
+
+	// Default paragraph format applied to all nodes. Write-only: not populated on read since there is no corresponding property at the SmartArt shape level in Aspose.Slides.
+	GetDefaultParagraphFormat() IParagraphFormat
+	SetDefaultParagraphFormat(newValue IParagraphFormat)
 }
 
 type SmartArt struct {
@@ -203,6 +207,9 @@ type SmartArt struct {
 
 	// The state of the SmartArt diagram with regard to (left-to-right) LTR or (right-to-left) RTL, if the diagram supports reversal.
 	IsReversed *bool `json:"IsReversed"`
+
+	// Default paragraph format applied to all nodes. Write-only: not populated on read since there is no corresponding property at the SmartArt shape level in Aspose.Slides.
+	DefaultParagraphFormat IParagraphFormat `json:"DefaultParagraphFormat,omitempty"`
 }
 
 func NewSmartArt() *SmartArt {
@@ -381,6 +388,13 @@ func (this *SmartArt) GetIsReversed() *bool {
 
 func (this *SmartArt) SetIsReversed(newValue *bool) {
 	this.IsReversed = newValue
+}
+func (this *SmartArt) GetDefaultParagraphFormat() IParagraphFormat {
+	return this.DefaultParagraphFormat
+}
+
+func (this *SmartArt) SetDefaultParagraphFormat(newValue IParagraphFormat) {
+	this.DefaultParagraphFormat = newValue
 }
 
 func (this *SmartArt) UnmarshalJSON(b []byte) error {
@@ -780,6 +794,28 @@ func (this *SmartArt) UnmarshalJSON(b []byte) error {
 				return err
 			}
 			this.IsReversed = valueForIsReversed
+		}
+	}
+	
+	if valDefaultParagraphFormat, ok := GetMapValue(objMap, "defaultParagraphFormat"); ok {
+		if valDefaultParagraphFormat != nil {
+			var valueForDefaultParagraphFormat ParagraphFormat
+			err = json.Unmarshal(*valDefaultParagraphFormat, &valueForDefaultParagraphFormat)
+			if err != nil {
+				return err
+			}
+			vObject, err := createObjectForType("ParagraphFormat", *valDefaultParagraphFormat)
+			if err != nil {
+				return err
+			}
+			err = json.Unmarshal(*valDefaultParagraphFormat, &vObject)
+			if err != nil {
+				return err
+			}
+			vInterfaceObject, ok := vObject.(IParagraphFormat)
+			if ok {
+				this.DefaultParagraphFormat = vInterfaceObject
+			}
 		}
 	}
 

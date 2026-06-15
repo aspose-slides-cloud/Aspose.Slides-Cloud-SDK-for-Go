@@ -28,6 +28,7 @@
 package usecasetests
 
 import (
+	"io/ioutil"
 	"testing"
 
 	slidescloud "github.com/aspose-slides-cloud/Aspose.Slides-Cloud-SDK-for-Go/v26"
@@ -633,5 +634,68 @@ func TestDeleteTableCellPortion(t *testing.T) {
 	if len(result.GetItems()) != 1 {
 		t.Errorf("Expected %v, but was %v", 2, len(result.GetItems()))
 		return
+	}
+}
+
+func TestImportTableFromWorkbook(t *testing.T) {
+	c, e := GetApiClient()
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	_, e = c.SlidesApi.CopyFile(tempFilePath, filePath, "", "", "")
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+
+	document, e := ioutil.ReadFile(localFolder + "/oleObject.xlsx")
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	var tableSlideIndex int32 = 9
+	result, _, e := c.SlidesApi.ImportTableFromWorkbook(fileName, tableSlideIndex, "Sheet1", "A1:B5", document,
+		nil, nil, "", "", password, folderName, "")
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	if result.GetType() != "Table" {
+		t.Errorf("Expected Table but was %v.", result.GetType())
+	}
+}
+
+func TestImportTableFromWorkbookByPath(t *testing.T) {
+	c, e := GetApiClient()
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	_, e = c.SlidesApi.CopyFile(tempFilePath, filePath, "", "", "")
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+
+	document, e := ioutil.ReadFile(localFolder + "/oleObject.xlsx")
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	_, _, e = c.SlidesApi.UploadFile(folderName+"/oleObject.xlsx", document, "")
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	var tableSlideIndex int32 = 9
+	result, _, e := c.SlidesApi.ImportTableFromWorkbook(fileName, tableSlideIndex, "Sheet1", "A1:B5", nil,
+		nil, nil, folderName+"/oleObject.xlsx", "", password, folderName, "")
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	if result.GetType() != "Table" {
+		t.Errorf("Expected Table but was %v.", result.GetType())
 	}
 }

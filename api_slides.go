@@ -3376,13 +3376,14 @@ func (a *SlidesApiService) CreateSection(name string, sectionName string, slideI
  @param optional (nil or map[string]interface{}) with one or more of:
      @param "dto" (ShapeBase) Shape DTO.
      @param "shapeToClone" (int32) Optional index for clone shape instead of adding a new one.
+     @param "cloneFromSlide" (int32) Optional index of the slide to clone the shape from. When set, shapeToClone refers to a shape on that slide.
      @param "position" (int32) Position of the new shape in the list. Default is at the end of the list.
      @param "password" (string) Document password.
      @param "folder" (string) Document folder.
      @param "storage" (string) Document storage.
      @param "subShape" (string) Sub-shape path (e.g. \&quot;3\&quot;, \&quot;3/shapes/2).
  @return ShapeBase*/
-func (a *SlidesApiService) CreateShape(name string, slideIndex int32, dto IShapeBase, shapeToClone *int32, position *int32, password string, folder string, storage string, subShape string) (IShapeBase, *http.Response, error) {
+func (a *SlidesApiService) CreateShape(name string, slideIndex int32, dto IShapeBase, shapeToClone *int32, cloneFromSlide *int32, position *int32, password string, folder string, storage string, subShape string) (IShapeBase, *http.Response, error) {
 	var (
 		localVarHttpMethod = strings.ToUpper("Post")
 		localVarPostBody interface{}
@@ -3416,6 +3417,11 @@ func (a *SlidesApiService) CreateShape(name string, slideIndex int32, dto IShape
 			return successPayload, nil, err
 		}
 	}
+	if cloneFromSlide != nil {
+		if err := typeCheckParameter(*cloneFromSlide, "int32", "cloneFromSlide"); err != nil {
+			return successPayload, nil, err
+		}
+	}
 	if position != nil {
 		if err := typeCheckParameter(*position, "int32", "position"); err != nil {
 			return successPayload, nil, err
@@ -3436,6 +3442,9 @@ func (a *SlidesApiService) CreateShape(name string, slideIndex int32, dto IShape
 
 	if shapeToClone != nil {
 		localVarQueryParams.Add("ShapeToClone", parameterToString(*shapeToClone, ""))
+	}
+	if cloneFromSlide != nil {
+		localVarQueryParams.Add("CloneFromSlide", parameterToString(*cloneFromSlide, ""))
 	}
 	if position != nil {
 		localVarQueryParams.Add("Position", parameterToString(*position, ""))
@@ -4401,13 +4410,14 @@ func (a *SlidesApiService) CreateSpecialSlidePortion(name string, slideIndex int
  @param dto Shape DTO.
  @param optional (nil or map[string]interface{}) with one or more of:
      @param "shapeToClone" (int32) Optional index for clone shape instead of adding a new one.
+     @param "cloneFromSlide" (int32) Optional index of the slide to clone the shape from. When set, shapeToClone refers to a shape on that slide.
      @param "position" (int32) Position of the new shape in the list. Default is at the end of the list.
      @param "password" (string) Document password.
      @param "folder" (string) Document folder.
      @param "storage" (string) Document storage.
      @param "subShape" (string) Sub-shape path (e.g. \&quot;3\&quot;, \&quot;3/shapes/2).
  @return ShapeBase*/
-func (a *SlidesApiService) CreateSpecialSlideShape(name string, slideIndex int32, slideType string, dto IShapeBase, shapeToClone *int32, position *int32, password string, folder string, storage string, subShape string) (IShapeBase, *http.Response, error) {
+func (a *SlidesApiService) CreateSpecialSlideShape(name string, slideIndex int32, slideType string, dto IShapeBase, shapeToClone *int32, cloneFromSlide *int32, position *int32, password string, folder string, storage string, subShape string) (IShapeBase, *http.Response, error) {
 	var (
 		localVarHttpMethod = strings.ToUpper("Post")
 		localVarPostBody interface{}
@@ -4456,6 +4466,11 @@ func (a *SlidesApiService) CreateSpecialSlideShape(name string, slideIndex int32
 			return successPayload, nil, err
 		}
 	}
+	if cloneFromSlide != nil {
+		if err := typeCheckParameter(*cloneFromSlide, "int32", "cloneFromSlide"); err != nil {
+			return successPayload, nil, err
+		}
+	}
 	if position != nil {
 		if err := typeCheckParameter(*position, "int32", "position"); err != nil {
 			return successPayload, nil, err
@@ -4476,6 +4491,9 @@ func (a *SlidesApiService) CreateSpecialSlideShape(name string, slideIndex int32
 
 	if shapeToClone != nil {
 		localVarQueryParams.Add("ShapeToClone", parameterToString(*shapeToClone, ""))
+	}
+	if cloneFromSlide != nil {
+		localVarQueryParams.Add("CloneFromSlide", parameterToString(*cloneFromSlide, ""))
 	}
 	if position != nil {
 		localVarQueryParams.Add("Position", parameterToString(*position, ""))
@@ -20906,6 +20924,173 @@ func (a *SlidesApiService) HighlightShapeText(name string, slideIndex int32, sha
 	return successPayload, localVarHttpResponse, err
 }
 
+/* SlidesApiService Imports a chart from an Excel workbook and adds it to the slide.
+ @param name Document name.
+ @param slideIndex Slide index.
+ @param worksheetName The name of the worksheet that contains the chart.
+ @param optional (nil or map[string]interface{}) with one or more of:
+     @param "document" ([]byte) Excel workbook data.
+     @param "chartName" (string) The name of the chart. Required if chartIndex is not specified.
+     @param "chartIndex" (int32) The zero-based index of the chart in the worksheet. Takes precedence over chartName.
+     @param "x" (float64) X coordinate of the chart (EMU).
+     @param "y" (float64) Y coordinate of the chart (EMU).
+     @param "embedAllWorkbook" (bool) If true, the entire workbook is embedded; if false, only chart data.
+     @param "workbookPath" (string) Storage path to the workbook. If omitted, the workbook must be uploaded as multipart form data.
+     @param "workbookStorage" (string) Storage name for workbookPath.
+     @param "password" (string) Document password.
+     @param "folder" (string) Presentation folder.
+     @param "storage" (string) Presentation storage.
+ @return ShapeBase*/
+func (a *SlidesApiService) ImportChartFromWorkbook(name string, slideIndex int32, worksheetName string, document []byte, chartName string, chartIndex *int32, x *float64, y *float64, embedAllWorkbook *bool, workbookPath string, workbookStorage string, password string, folder string, storage string) (IShapeBase, *http.Response, error) {
+	var (
+		localVarHttpMethod = strings.ToUpper("Post")
+		localVarPostBody interface{}
+		localVarFiles [][]byte
+	 	successPayload IShapeBase
+	)
+
+	if len(name) == 0 {
+		return successPayload, nil, reportError("Missing required parameter name")
+	}
+	if len(worksheetName) == 0 {
+		return successPayload, nil, reportError("Missing required parameter worksheetName")
+	}
+	// create path and map variables
+	localVarPath := a.client.cfg.GetApiUrl() + "/slides/{name}/slides/{slideIndex}/shapes/fromExcelChart"
+	namePathStringValue := fmt.Sprintf("%v", name)
+	if len(namePathStringValue) > 0 {
+		localVarPath = strings.Replace(localVarPath, "{"+"name"+"}", namePathStringValue, -1)
+	} else {
+		localVarPath = strings.Replace(localVarPath, "/{"+"name"+"}", "", -1)
+	}
+	slideIndexPathStringValue := fmt.Sprintf("%v", slideIndex)
+	if len(slideIndexPathStringValue) > 0 {
+		localVarPath = strings.Replace(localVarPath, "{"+"slideIndex"+"}", slideIndexPathStringValue, -1)
+	} else {
+		localVarPath = strings.Replace(localVarPath, "/{"+"slideIndex"+"}", "", -1)
+	}
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+
+	if err := typeCheckParameter(chartName, "string", "chartName"); err != nil {
+		return successPayload, nil, err
+	}
+	if chartIndex != nil {
+		if err := typeCheckParameter(*chartIndex, "int32", "chartIndex"); err != nil {
+			return successPayload, nil, err
+		}
+	}
+	if x != nil {
+		if err := typeCheckParameter(*x, "float64", "x"); err != nil {
+			return successPayload, nil, err
+		}
+	}
+	if y != nil {
+		if err := typeCheckParameter(*y, "float64", "y"); err != nil {
+			return successPayload, nil, err
+		}
+	}
+	if embedAllWorkbook != nil {
+		if err := typeCheckParameter(*embedAllWorkbook, "bool", "embedAllWorkbook"); err != nil {
+			return successPayload, nil, err
+		}
+	}
+	if err := typeCheckParameter(workbookPath, "string", "workbookPath"); err != nil {
+		return successPayload, nil, err
+	}
+	if err := typeCheckParameter(workbookStorage, "string", "workbookStorage"); err != nil {
+		return successPayload, nil, err
+	}
+	if err := typeCheckParameter(password, "string", "password"); err != nil {
+		return successPayload, nil, err
+	}
+	if err := typeCheckParameter(folder, "string", "folder"); err != nil {
+		return successPayload, nil, err
+	}
+	if err := typeCheckParameter(storage, "string", "storage"); err != nil {
+		return successPayload, nil, err
+	}
+
+	localVarQueryParams.Add("WorksheetName", parameterToString(worksheetName, ""))
+	if localVarTempParam := chartName; len(localVarTempParam) > 0 {
+		localVarQueryParams.Add("ChartName", parameterToString(localVarTempParam, ""))
+	}
+	if chartIndex != nil {
+		localVarQueryParams.Add("ChartIndex", parameterToString(*chartIndex, ""))
+	}
+	if x != nil {
+		localVarQueryParams.Add("X", parameterToString(*x, ""))
+	}
+	if y != nil {
+		localVarQueryParams.Add("Y", parameterToString(*y, ""))
+	}
+	if embedAllWorkbook != nil {
+		localVarQueryParams.Add("EmbedAllWorkbook", parameterToString(embedAllWorkbook, ""))
+	}
+	if localVarTempParam := workbookPath; len(localVarTempParam) > 0 {
+		localVarQueryParams.Add("WorkbookPath", parameterToString(localVarTempParam, ""))
+	}
+	if localVarTempParam := workbookStorage; len(localVarTempParam) > 0 {
+		localVarQueryParams.Add("WorkbookStorage", parameterToString(localVarTempParam, ""))
+	}
+	if localVarTempParam := folder; len(localVarTempParam) > 0 {
+		localVarQueryParams.Add("Folder", parameterToString(localVarTempParam, ""))
+	}
+	if localVarTempParam := storage; len(localVarTempParam) > 0 {
+		localVarQueryParams.Add("Storage", parameterToString(localVarTempParam, ""))
+	}
+	// to determine the Content-Type header
+	localVarHttpContentTypes := []string{ "application/json" }
+
+	// set Content-Type header
+	localVarHttpContentType := selectHeaderContentType(localVarHttpContentTypes)
+	if localVarHttpContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHttpContentType
+	}
+
+	// to determine the Accept header
+	localVarHttpHeaderAccepts := []string{
+		"application/json",
+		}
+
+	// set Accept header
+	localVarHttpHeaderAccept := selectHeaderAccept(localVarHttpHeaderAccepts)
+	if localVarHttpHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHttpHeaderAccept
+	}
+	if localVarTempParam := password; len(localVarTempParam) > 0 {
+		localVarHeaderParams["Password"] = parameterToString(localVarTempParam, "")
+	}
+	if len(document) > 0 {
+		localVarFiles = append(localVarFiles, document)
+	}
+	localVarHttpResponse, responseBytes, err := a.client.makeRequest(nil, localVarPath, localVarHttpMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFiles)
+	responseBody := bytes.NewReader(responseBytes)
+	if localVarHttpResponse != nil && localVarHttpResponse.StatusCode >= 300 {
+		var errorMessage ErrorMessage
+		if err = json.NewDecoder(responseBody).Decode(&errorMessage); err != nil {
+			return successPayload, localVarHttpResponse, reportError(localVarHttpResponse.Status)
+		}
+		return successPayload, localVarHttpResponse, reportError(string(responseBytes))
+	}
+
+	successPayloadObject, err := createObjectForType("ShapeBase", responseBytes)
+	if err != nil {
+		return successPayload, localVarHttpResponse, err
+	}
+	if err = json.NewDecoder(responseBody).Decode(successPayloadObject); err != nil {
+		if sp, ok := successPayloadObject.(IShapeBase); ok {
+			return sp, localVarHttpResponse, err
+		}
+		return successPayload, localVarHttpResponse, err
+	}
+	if successPayload, _ = successPayloadObject.(IShapeBase); true {
+	}
+
+	return successPayload, localVarHttpResponse, err
+}
+
 /* SlidesApiService Create presentation document from html.
  @param name Document name.
  @param optional (nil or map[string]interface{}) with one or more of:
@@ -21275,6 +21460,153 @@ func (a *SlidesApiService) ImportShapesFromSvg(name string, slideIndex int32, im
 		return successPayload, localVarHttpResponse, err
 	}
 	if successPayload, _ = successPayloadObject.(IShapes); true {
+	}
+
+	return successPayload, localVarHttpResponse, err
+}
+
+/* SlidesApiService Imports a table from an Excel workbook and adds it to the slide.
+ @param name Document name.
+ @param slideIndex Slide index.
+ @param worksheetName The name of the worksheet that contains the table.
+ @param cellRange The cell range that defines the table (e.g. \&quot;A1:D10\&quot;).
+ @param optional (nil or map[string]interface{}) with one or more of:
+     @param "document" ([]byte) Excel workbook data.
+     @param "x" (float64) X coordinate of the table (EMU).
+     @param "y" (float64) Y coordinate of the table (EMU).
+     @param "workbookPath" (string) Storage path to the workbook. If omitted, the workbook must be uploaded as multipart form data.
+     @param "workbookStorage" (string) Storage name for workbookPath.
+     @param "password" (string) Document password.
+     @param "folder" (string) Presentation folder.
+     @param "storage" (string) Presentation storage.
+ @return ShapeBase*/
+func (a *SlidesApiService) ImportTableFromWorkbook(name string, slideIndex int32, worksheetName string, cellRange string, document []byte, x *float64, y *float64, workbookPath string, workbookStorage string, password string, folder string, storage string) (IShapeBase, *http.Response, error) {
+	var (
+		localVarHttpMethod = strings.ToUpper("Post")
+		localVarPostBody interface{}
+		localVarFiles [][]byte
+	 	successPayload IShapeBase
+	)
+
+	if len(name) == 0 {
+		return successPayload, nil, reportError("Missing required parameter name")
+	}
+	if len(worksheetName) == 0 {
+		return successPayload, nil, reportError("Missing required parameter worksheetName")
+	}
+	if len(cellRange) == 0 {
+		return successPayload, nil, reportError("Missing required parameter cellRange")
+	}
+	// create path and map variables
+	localVarPath := a.client.cfg.GetApiUrl() + "/slides/{name}/slides/{slideIndex}/shapes/fromExcelTable"
+	namePathStringValue := fmt.Sprintf("%v", name)
+	if len(namePathStringValue) > 0 {
+		localVarPath = strings.Replace(localVarPath, "{"+"name"+"}", namePathStringValue, -1)
+	} else {
+		localVarPath = strings.Replace(localVarPath, "/{"+"name"+"}", "", -1)
+	}
+	slideIndexPathStringValue := fmt.Sprintf("%v", slideIndex)
+	if len(slideIndexPathStringValue) > 0 {
+		localVarPath = strings.Replace(localVarPath, "{"+"slideIndex"+"}", slideIndexPathStringValue, -1)
+	} else {
+		localVarPath = strings.Replace(localVarPath, "/{"+"slideIndex"+"}", "", -1)
+	}
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+
+	if x != nil {
+		if err := typeCheckParameter(*x, "float64", "x"); err != nil {
+			return successPayload, nil, err
+		}
+	}
+	if y != nil {
+		if err := typeCheckParameter(*y, "float64", "y"); err != nil {
+			return successPayload, nil, err
+		}
+	}
+	if err := typeCheckParameter(workbookPath, "string", "workbookPath"); err != nil {
+		return successPayload, nil, err
+	}
+	if err := typeCheckParameter(workbookStorage, "string", "workbookStorage"); err != nil {
+		return successPayload, nil, err
+	}
+	if err := typeCheckParameter(password, "string", "password"); err != nil {
+		return successPayload, nil, err
+	}
+	if err := typeCheckParameter(folder, "string", "folder"); err != nil {
+		return successPayload, nil, err
+	}
+	if err := typeCheckParameter(storage, "string", "storage"); err != nil {
+		return successPayload, nil, err
+	}
+
+	localVarQueryParams.Add("WorksheetName", parameterToString(worksheetName, ""))
+	localVarQueryParams.Add("CellRange", parameterToString(cellRange, ""))
+	if x != nil {
+		localVarQueryParams.Add("X", parameterToString(*x, ""))
+	}
+	if y != nil {
+		localVarQueryParams.Add("Y", parameterToString(*y, ""))
+	}
+	if localVarTempParam := workbookPath; len(localVarTempParam) > 0 {
+		localVarQueryParams.Add("WorkbookPath", parameterToString(localVarTempParam, ""))
+	}
+	if localVarTempParam := workbookStorage; len(localVarTempParam) > 0 {
+		localVarQueryParams.Add("WorkbookStorage", parameterToString(localVarTempParam, ""))
+	}
+	if localVarTempParam := folder; len(localVarTempParam) > 0 {
+		localVarQueryParams.Add("Folder", parameterToString(localVarTempParam, ""))
+	}
+	if localVarTempParam := storage; len(localVarTempParam) > 0 {
+		localVarQueryParams.Add("Storage", parameterToString(localVarTempParam, ""))
+	}
+	// to determine the Content-Type header
+	localVarHttpContentTypes := []string{ "application/json" }
+
+	// set Content-Type header
+	localVarHttpContentType := selectHeaderContentType(localVarHttpContentTypes)
+	if localVarHttpContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHttpContentType
+	}
+
+	// to determine the Accept header
+	localVarHttpHeaderAccepts := []string{
+		"application/json",
+		}
+
+	// set Accept header
+	localVarHttpHeaderAccept := selectHeaderAccept(localVarHttpHeaderAccepts)
+	if localVarHttpHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHttpHeaderAccept
+	}
+	if localVarTempParam := password; len(localVarTempParam) > 0 {
+		localVarHeaderParams["Password"] = parameterToString(localVarTempParam, "")
+	}
+	if len(document) > 0 {
+		localVarFiles = append(localVarFiles, document)
+	}
+	localVarHttpResponse, responseBytes, err := a.client.makeRequest(nil, localVarPath, localVarHttpMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFiles)
+	responseBody := bytes.NewReader(responseBytes)
+	if localVarHttpResponse != nil && localVarHttpResponse.StatusCode >= 300 {
+		var errorMessage ErrorMessage
+		if err = json.NewDecoder(responseBody).Decode(&errorMessage); err != nil {
+			return successPayload, localVarHttpResponse, reportError(localVarHttpResponse.Status)
+		}
+		return successPayload, localVarHttpResponse, reportError(string(responseBytes))
+	}
+
+	successPayloadObject, err := createObjectForType("ShapeBase", responseBytes)
+	if err != nil {
+		return successPayload, localVarHttpResponse, err
+	}
+	if err = json.NewDecoder(responseBody).Decode(successPayloadObject); err != nil {
+		if sp, ok := successPayloadObject.(IShapeBase); ok {
+			return sp, localVarHttpResponse, err
+		}
+		return successPayload, localVarHttpResponse, err
+	}
+	if successPayload, _ = successPayloadObject.(IShapeBase); true {
 	}
 
 	return successPayload, localVarHttpResponse, err

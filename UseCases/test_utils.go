@@ -53,7 +53,7 @@ func GetAsyncApiClient() (*slidescloud.APIClient, error) {
 			return nil, err
 		}
 		json.NewDecoder(configFile).Decode(cfg)
-		cfg.BasePath = cfg.AsyncBasePath
+		cfg.BasePath = cfg.GetAsyncBasePath()
 		testAsyncApiClient = slidescloud.NewAPIClient(cfg)
 	}
 	return testAsyncApiClient, nil

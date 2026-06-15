@@ -27,6 +27,14 @@ You may want to check out Aspose free [Powerpoint to PDF](https://products.aspos
 **Web:** HTML/HTML5
 **Other:** MPEG4, SWF (export whole presentations)
 
+## Enhancements in Version 26.6
+
+* Added **cloneFromSlide** parameter to **CreateShape** and **CreateSpecialSlideShape** methods, enabling cross-slide shape cloning.
+* New **ImportChartFromWorkbook** and **ImportTableFromWorkbook** methods to import charts and tables from an Excel workbook.
+* Enriched **SmartArt** and **SmartArtNode** with DefaultParagraphFormat** write-only property. You can specify paragraph formatting for a smart art shape and individual nodes.
+* Added **CompressionLevel** property to **PptxExportOptions** class. It controls the ZIP compression used when saving a PPTX file.
+* Created **Logger** configuration property for specifying a custom logging function.
+
 ## Enhancements in Version 26.1
 
 * Added **SpellCheck** boolean property to **PortionFormat**.

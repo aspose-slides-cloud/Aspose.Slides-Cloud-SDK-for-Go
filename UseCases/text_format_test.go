@@ -89,7 +89,7 @@ func TestTextFormat3D(t *testing.T) {
 	textFormat.ThreeDFormat = threeDFormat
 	dto.TextFrameFormat = textFormat
 
-	response, _, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, password, folderName, "", "")
+	response, _, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, nil, password, folderName, "", "")
 
 	if e != nil {
 		t.Errorf("Error: %v.", e)
@@ -138,7 +138,7 @@ func TestTextFrameFormatGeneral(t *testing.T) {
 	textFrameFormat.DefaultParagraphFormat = defaultParagraphFormat
 	dto.TextFrameFormat = textFrameFormat
 
-	response, _, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, password, folderName, "", "")
+	response, _, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, nil, password, folderName, "", "")
 
 	if e != nil {
 		t.Errorf("Error: %v.", e)

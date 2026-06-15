@@ -91,7 +91,7 @@ func TestDefaultChartValues(t *testing.T) {
 	dto1.SetAxes(&axes)
 	dto1.SetX(12)
 	dto1.SetY(14)
-	_, _, e = c.SlidesApi.CreateShape(fileName, slideIndex, &dto1, nil, nil, password, folderName, "", "")
+	_, _, e = c.SlidesApi.CreateShape(fileName, slideIndex, &dto1, nil, nil, nil, password, folderName, "", "")
 	if e != nil {
 		t.Errorf("Error: %v.", e)
 		return

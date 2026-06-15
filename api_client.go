@@ -213,9 +213,9 @@ func (c *APIClient) makeRequestWithAuthCheck(
 		return resp, nil, false, err
 	}
 	if c.cfg.Debug {
-		fmt.Printf("-->: %v %v %v\n", r.Method, r.URL, r.Header)
+		c.log(fmt.Sprintf("-->: %v %v %v\n", r.Method, r.URL, r.Header))
 		if !strings.Contains(r.Header.Get("Content-Type"), "multipart") && r.Body != nil {
-			fmt.Printf("-->BODY: %v\n", r.Body)
+			c.log(fmt.Sprintf("-->BODY: %v\n", r.Body))
 		}
 	}
 	localVarHttpResponse, err := c.callAPI(r)
@@ -223,14 +223,14 @@ func (c *APIClient) makeRequestWithAuthCheck(
 		return localVarHttpResponse, nil, false, err
 	}
 	if c.cfg.Debug {
-		fmt.Printf("<--: %v\n", localVarHttpResponse)
+		c.log(fmt.Sprintf("<--: %v\n", localVarHttpResponse))
 	}
 	defer localVarHttpResponse.Body.Close()
         responseLength := 0
 	responseBytes, err = ioutil.ReadAll(localVarHttpResponse.Body)
 	if err == nil && localVarHttpResponse != nil {
 		if c.cfg.Debug && (strings.Contains(localVarHttpResponse.Header.Get("Content-Type"), "text") || strings.Contains(localVarHttpResponse.Header.Get("Content-Type"), "json")) {
-			fmt.Printf("<--BODY: %v\n", string(responseBytes))
+			c.log(fmt.Sprintf("<--BODY: %v\n", string(responseBytes)))
 		}
 		responseBytes = bytes.Replace(responseBytes, []byte(":\"NaN\""), []byte(":null"), -1)
 	        responseLength = len(responseBytes)
@@ -358,7 +358,7 @@ func (c *APIClient) prepareRequestHeader(localVarRequest *http.Request, headerPa
 		if (len(c.cfg.OAuthToken) == 0) {
 			oauthRequest, err := http.NewRequest(
 				"POST",
-				c.cfg.AuthBasePath + "/connect/token",
+				c.cfg.GetAuthBasePath() + "/connect/token",
 				strings.NewReader("grant_type=client_credentials&client_id=" + c.cfg.AppSid + "&client_secret=" + c.cfg.AppKey))
 			if (err != nil) {
 				return nil, err
@@ -384,6 +384,14 @@ func (c *APIClient) prepareRequestHeader(localVarRequest *http.Request, headerPa
 		localVarRequest.Header.Add("Authorization", "Bearer " + c.cfg.OAuthToken)
 	}
 	return nil, nil
+}
+
+func (c *APIClient) log(message string) {
+	if c.cfg.Logger != nil {
+		c.cfg.Logger(message)
+	} else {
+		fmt.Print(message)
+	}
 }
 
 // Prevent trying to import "fmt"

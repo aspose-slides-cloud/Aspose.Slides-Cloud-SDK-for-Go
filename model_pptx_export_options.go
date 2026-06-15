@@ -69,6 +69,10 @@ type IPptxExportOptions interface {
 	GetZip64Mode() string
 	SetZip64Mode(newValue string)
 
+	// The compression level used when saving the presentation document. Higher compression levels produce smaller files but require more processing time. The actual compression ratio depends on the content of the presentation. The default value is CompressionLevel.Level6.
+	GetCompressionLevel() string
+	SetCompressionLevel(newValue string)
+
 	// True to refresh the presentation thumbnail on save
 	GetRefreshThumbnail() *bool
 	SetRefreshThumbnail(newValue *bool)
@@ -102,6 +106,9 @@ type PptxExportOptions struct {
 
 	// Specifies whether the ZIP64 format is used for the Presentation document. The default value is Zip64Mode.IfNecessary.
 	Zip64Mode string `json:"Zip64Mode,omitempty"`
+
+	// The compression level used when saving the presentation document. Higher compression levels produce smaller files but require more processing time. The actual compression ratio depends on the content of the presentation. The default value is CompressionLevel.Level6.
+	CompressionLevel string `json:"CompressionLevel,omitempty"`
 
 	// True to refresh the presentation thumbnail on save
 	RefreshThumbnail *bool `json:"RefreshThumbnail"`
@@ -174,6 +181,13 @@ func (this *PptxExportOptions) GetZip64Mode() string {
 
 func (this *PptxExportOptions) SetZip64Mode(newValue string) {
 	this.Zip64Mode = newValue
+}
+func (this *PptxExportOptions) GetCompressionLevel() string {
+	return this.CompressionLevel
+}
+
+func (this *PptxExportOptions) SetCompressionLevel(newValue string) {
+	this.CompressionLevel = newValue
 }
 func (this *PptxExportOptions) GetRefreshThumbnail() *bool {
 	return this.RefreshThumbnail
@@ -331,6 +345,23 @@ func (this *PptxExportOptions) UnmarshalJSON(b []byte) error {
 				this.Zip64Mode = string(valueForZip64ModeInt)
 			} else {
 				this.Zip64Mode = valueForZip64Mode
+			}
+		}
+	}
+	
+	if valCompressionLevel, ok := GetMapValue(objMap, "compressionLevel"); ok {
+		if valCompressionLevel != nil {
+			var valueForCompressionLevel string
+			err = json.Unmarshal(*valCompressionLevel, &valueForCompressionLevel)
+			if err != nil {
+				var valueForCompressionLevelInt int32
+				err = json.Unmarshal(*valCompressionLevel, &valueForCompressionLevelInt)
+				if err != nil {
+					return err
+				}
+				this.CompressionLevel = string(valueForCompressionLevelInt)
+			} else {
+				this.CompressionLevel = valueForCompressionLevel
 			}
 		}
 	}

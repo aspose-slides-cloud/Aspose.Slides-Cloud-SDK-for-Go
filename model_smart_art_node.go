@@ -56,6 +56,10 @@ type ISmartArtNode interface {
 	// Get or sets list to paragraphs list
 	GetParagraphs() IResourceUri
 	SetParagraphs(newValue IResourceUri)
+
+	// Default paragraph format for the node's text frame.
+	GetDefaultParagraphFormat() IParagraphFormat
+	SetDefaultParagraphFormat(newValue IParagraphFormat)
 }
 
 type SmartArtNode struct {
@@ -77,6 +81,9 @@ type SmartArtNode struct {
 
 	// Get or sets list to paragraphs list
 	Paragraphs IResourceUri `json:"Paragraphs,omitempty"`
+
+	// Default paragraph format for the node's text frame.
+	DefaultParagraphFormat IParagraphFormat `json:"DefaultParagraphFormat,omitempty"`
 }
 
 func NewSmartArtNode() *SmartArtNode {
@@ -126,6 +133,13 @@ func (this *SmartArtNode) GetParagraphs() IResourceUri {
 
 func (this *SmartArtNode) SetParagraphs(newValue IResourceUri) {
 	this.Paragraphs = newValue
+}
+func (this *SmartArtNode) GetDefaultParagraphFormat() IParagraphFormat {
+	return this.DefaultParagraphFormat
+}
+
+func (this *SmartArtNode) SetDefaultParagraphFormat(newValue IParagraphFormat) {
+	this.DefaultParagraphFormat = newValue
 }
 
 func (this *SmartArtNode) UnmarshalJSON(b []byte) error {
@@ -239,6 +253,28 @@ func (this *SmartArtNode) UnmarshalJSON(b []byte) error {
 			vInterfaceObject, ok := vObject.(IResourceUri)
 			if ok {
 				this.Paragraphs = vInterfaceObject
+			}
+		}
+	}
+	
+	if valDefaultParagraphFormat, ok := GetMapValue(objMap, "defaultParagraphFormat"); ok {
+		if valDefaultParagraphFormat != nil {
+			var valueForDefaultParagraphFormat ParagraphFormat
+			err = json.Unmarshal(*valDefaultParagraphFormat, &valueForDefaultParagraphFormat)
+			if err != nil {
+				return err
+			}
+			vObject, err := createObjectForType("ParagraphFormat", *valDefaultParagraphFormat)
+			if err != nil {
+				return err
+			}
+			err = json.Unmarshal(*valDefaultParagraphFormat, &vObject)
+			if err != nil {
+				return err
+			}
+			vInterfaceObject, ok := vObject.(IParagraphFormat)
+			if ok {
+				this.DefaultParagraphFormat = vInterfaceObject
 			}
 		}
 	}

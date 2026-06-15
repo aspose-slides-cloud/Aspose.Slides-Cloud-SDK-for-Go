@@ -239,7 +239,7 @@ func TestShapeAdd(t *testing.T) {
 
 	dto := slidescloud.NewShape()
 	dto.ShapeType = "Callout1"
-	result, _, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, password, folderName, "", "")
+	result, _, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, nil, password, folderName, "", "")
 	if e != nil {
 		t.Errorf("Error: %v.", e)
 		return
@@ -267,7 +267,7 @@ func TestShapeEmpty(t *testing.T) {
 	}
 
 	dto := slidescloud.NewShape()
-	_, response, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, password, folderName, "", "")
+	_, response, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, nil, password, folderName, "", "")
 	if e == nil {
 		t.Errorf("Shape with undefined type should not have been created.")
 		return
@@ -294,7 +294,7 @@ func TestGraphicalObjectEmpty(t *testing.T) {
 	}
 
 	dto := slidescloud.NewGraphicalObject()
-	_, response, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, password, folderName, "", "")
+	_, response, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, nil, password, folderName, "", "")
 	if e == nil {
 		t.Errorf("GraphicalObject should not have been created.")
 		return
@@ -324,7 +324,7 @@ func TestPictureFrameAdd(t *testing.T) {
 	fill := slidescloud.NewPictureFill()
 	fill.Base64Data = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXY5g+ffp/AAZTAsWGL27gAAAAAElFTkSuQmCC"
 	dto.PictureFillFormat = fill
-	result, _, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, password, folderName, "", "")
+	result, _, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, nil, password, folderName, "", "")
 	if e != nil {
 		t.Errorf("Error: %v.", e)
 		return
@@ -352,7 +352,7 @@ func TestPictureFrameEmpty(t *testing.T) {
 	}
 
 	dto := slidescloud.NewPictureFrame()
-	_, response, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, password, folderName, "", "")
+	_, response, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, nil, password, folderName, "", "")
 	if e == nil {
 		t.Errorf("PictureFrame with undefined data should not have been created.")
 		return
@@ -380,7 +380,7 @@ func TestAudioFrameAdd(t *testing.T) {
 
 	dto := slidescloud.NewAudioFrame()
 	dto.Base64Data = "bXAzc2FtcGxl"
-	result, _, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, password, folderName, "", "")
+	result, _, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, nil, password, folderName, "", "")
 	if e != nil {
 		t.Errorf("Error: %v.", e)
 		return
@@ -408,7 +408,7 @@ func TestAudioFrameEmpty(t *testing.T) {
 	}
 
 	dto := slidescloud.NewAudioFrame()
-	_, response, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, password, folderName, "", "")
+	_, response, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, nil, password, folderName, "", "")
 	if e == nil {
 		t.Errorf("AudioFrame with undefined data should not have been created.")
 		return
@@ -436,7 +436,7 @@ func TestVideoFrameAdd(t *testing.T) {
 
 	dto := slidescloud.NewVideoFrame()
 	dto.Base64Data = "bXAzc2FtcGxl"
-	result, _, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, password, folderName, "", "")
+	result, _, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, nil, password, folderName, "", "")
 	if e != nil {
 		t.Errorf("Error: %v.", e)
 		return
@@ -464,7 +464,7 @@ func TestVideoFrameEmpty(t *testing.T) {
 	}
 
 	dto := slidescloud.NewVideoFrame()
-	_, response, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, password, folderName, "", "")
+	_, response, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, nil, password, folderName, "", "")
 	if e == nil {
 		t.Errorf("VideoFrame with undefined data should not have been created.")
 		return
@@ -491,7 +491,7 @@ func TestOleObjectFrameEmpty(t *testing.T) {
 	}
 
 	dto := slidescloud.NewOleObjectFrame()
-	_, response, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, password, folderName, "", "")
+	_, response, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, nil, password, folderName, "", "")
 	if e == nil {
 		t.Errorf("OleObjectFrame should not have been created.")
 		return
@@ -536,7 +536,7 @@ func TestSmartArtAdd(t *testing.T) {
 	node2.Text = "Second"
 	node2.OrgChartLayout = "Initial"
 	dto.Nodes = []slidescloud.ISmartArtNode{node1, node2}
-	result, _, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, password, folderName, "", "")
+	result, _, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, nil, password, folderName, "", "")
 	if e != nil {
 		t.Errorf("Error: %v.", e)
 		return
@@ -627,7 +627,7 @@ func TestSmartArtEmpty(t *testing.T) {
 	}
 
 	dto := slidescloud.NewSmartArt()
-	result, _, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, password, folderName, "", "")
+	result, _, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, nil, password, folderName, "", "")
 	if e != nil {
 		t.Errorf("Error: %v.", e)
 		return
@@ -656,7 +656,7 @@ func TestChartEmpty(t *testing.T) {
 	}
 
 	dto := slidescloud.NewChart()
-	_, response, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, password, folderName, "", "")
+	_, response, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, nil, password, folderName, "", "")
 	if e == nil {
 		t.Errorf("Chart with undefined data should not have been created.")
 		return
@@ -746,7 +746,7 @@ func TestTableAdd(t *testing.T) {
 	dto.FirstRow = &firstRow
 	horizontalBanding := true
 	dto.HorizontalBanding = &horizontalBanding
-	result, _, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, password, folderName, "", "")
+	result, _, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, nil, password, folderName, "", "")
 	if e != nil {
 		t.Errorf("Error: %v.", e)
 		return
@@ -774,7 +774,7 @@ func TestTableEmpty(t *testing.T) {
 	}
 
 	dto := slidescloud.NewTable()
-	_, response, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, password, folderName, "", "")
+	_, response, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, nil, password, folderName, "", "")
 	if e == nil {
 		t.Errorf("Table with undefinined cell data should not have been created.")
 		return
@@ -801,7 +801,7 @@ func TestGroupShapeEmpty(t *testing.T) {
 	}
 
 	dto := slidescloud.NewGroupShape()
-	result, _, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, password, folderName, "", "")
+	result, _, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, nil, password, folderName, "", "")
 	if e != nil {
 		t.Errorf("Error: %v.", e)
 		return
@@ -836,7 +836,7 @@ func TestConnectorAdd(t *testing.T) {
 	end := slidescloud.NewResourceUri()
 	end.Href = "https://api.aspose.cloud/v3.0/slides/myPresentation.pptx/slides/1/shapes/2"
 	dto.EndShapeConnectedTo = end
-	result, _, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, password, folderName, "", "")
+	result, _, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, nil, password, folderName, "", "")
 	if e != nil {
 		t.Errorf("Error: %v.", e)
 		return
@@ -864,7 +864,7 @@ func TestConnectorEmpty(t *testing.T) {
 	}
 
 	dto := slidescloud.NewConnector()
-	result, _, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, password, folderName, "", "")
+	result, _, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, nil, password, folderName, "", "")
 	if e != nil {
 		t.Errorf("Error: %v.", e)
 		return
@@ -899,7 +899,7 @@ func TestCreateSubshape(t *testing.T) {
 	dto.SetHeight(50)
 
 	subShape := "4"
-	shapeBase, _, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, password, folderName,
+	shapeBase, _, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, nil, password, folderName,
 		"", subShape)
 	if e != nil {
 		t.Errorf("Error: %v.", e)
@@ -1473,7 +1473,7 @@ func TestZoomFrameAdd(t *testing.T) {
 	dto.SetHeight(100)
 	dto.SetTargetSlideIndex(2)
 
-	response, _, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, password, folderName, "", "")
+	response, _, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, nil, password, folderName, "", "")
 	if e != nil {
 		t.Errorf("Error: %v.", e)
 		return
@@ -1514,7 +1514,7 @@ func TestSectionZoomFrameAdd(t *testing.T) {
 	dto.SetHeight(100)
 	dto.SetTargetSectionIndex(2)
 
-	response, _, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, password, folderName, "", "")
+	response, _, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, nil, password, folderName, "", "")
 	if e != nil {
 		t.Errorf("Error: %v.", e)
 		return
@@ -1556,7 +1556,7 @@ func TestOleObjectFrameAddByLink(t *testing.T) {
 	dto.SetLinkPath("OleObject.xlsx")
 	dto.SetObjectProgId("Excel.Sheet.8")
 
-	response, _, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, password, folderName, "", "")
+	response, _, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, nil, password, folderName, "", "")
 	if e != nil {
 		t.Errorf("Error: %v.", e)
 		return
@@ -1604,7 +1604,7 @@ func TestOleObjectFrameAddEmbedded(t *testing.T) {
 	dto.SetEmbeddedFileBase64Data(base64.StdEncoding.EncodeToString(source))
 	dto.SetEmbeddedFileExtension("xlsx")
 
-	response, _, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, password, folderName, "", "")
+	response, _, e := c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, nil, password, folderName, "", "")
 	if e != nil {
 		t.Errorf("Error: %v.", e)
 		return
@@ -1640,7 +1640,7 @@ func TestGroupShapeAdd(t *testing.T) {
 	}
 
 	dto := slidescloud.NewGroupShape()
-	c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, password, folderName, "", "")
+	c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, nil, password, folderName, "", "")
 
 	shape1 := slidescloud.NewShape()
 	shape1.SetShapeType("Rectangle")
@@ -1663,9 +1663,9 @@ func TestGroupShapeAdd(t *testing.T) {
 	shape3.SetWidth(50)
 	shape3.SetHeight(50)
 
-	c.SlidesApi.CreateShape(fileName, slideIndex, shape1, nil, nil, password, folderName, "", subShape)
-	c.SlidesApi.CreateShape(fileName, slideIndex, shape2, nil, nil, password, folderName, "", subShape)
-	c.SlidesApi.CreateShape(fileName, slideIndex, shape3, nil, nil, password, folderName, "", subShape)
+	c.SlidesApi.CreateShape(fileName, slideIndex, shape1, nil, nil, nil, password, folderName, "", subShape)
+	c.SlidesApi.CreateShape(fileName, slideIndex, shape2, nil, nil, nil, password, folderName, "", subShape)
+	c.SlidesApi.CreateShape(fileName, slideIndex, shape3, nil, nil, nil, password, folderName, "", subShape)
 
 	shapes, _, e := c.SlidesApi.GetShapes(fileName, slideIndex, password, folderName, "", "", "")
 	if e != nil {
@@ -1908,5 +1908,73 @@ func TestDownloadShapeFromDto(t *testing.T) {
 	if e != nil {
 		t.Errorf("Error: %v.", e)
 		return
+	}
+}
+func TestSmartArtNodeDefaultParagraphFormat(t *testing.T) {
+	var smartArtSlideIndex int32 = 7
+	var smartArtIndex int32 = 1
+
+	c, e := GetApiClient()
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	_, e = c.SlidesApi.CopyFile(tempFilePath, filePath, "", "", "")
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+
+	existing, _, e := c.SlidesApi.GetShape(fileName, smartArtSlideIndex, smartArtIndex, password, folderName, "", "")
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	smartArt := existing.(slidescloud.ISmartArt)
+	paragraphFormat := slidescloud.NewParagraphFormat()
+	bulletFill := slidescloud.NewSolidFill()
+	color := "#FFFF0000"
+	bulletFill.Color = &color
+	paragraphFormat.BulletFillFormat = bulletFill
+	smartArt.GetNodes()[0].SetDefaultParagraphFormat(paragraphFormat)
+
+	updated, _, e := c.SlidesApi.UpdateShape(fileName, smartArtSlideIndex, smartArtIndex, smartArt, password, folderName, "", "")
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	updatedSmartArt := updated.(slidescloud.ISmartArt)
+	if updatedSmartArt.GetNodes()[0].GetDefaultParagraphFormat() == nil {
+		t.Errorf("DefaultParagraphFormat should not be nil.")
+		return
+	}
+	if updatedSmartArt.GetNodes()[0].GetDefaultParagraphFormat().GetBulletFillFormat().GetType() != "Solid" {
+		t.Errorf("Expected Solid fill but was %v.", updatedSmartArt.GetNodes()[0].GetDefaultParagraphFormat().GetBulletFillFormat().GetType())
+	}
+}
+
+func TestShapeCloneFromSlide(t *testing.T) {
+	var targetSlideIndex int32 = 3
+	var shapeToClone int32 = 1
+	var cloneFromSlide int32 = 1
+
+	c, e := GetApiClient()
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	_, e = c.SlidesApi.CopyFile(tempFilePath, filePath, "", "", "")
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+
+	result, _, e := c.SlidesApi.CreateShape(fileName, targetSlideIndex, nil, &shapeToClone, &cloneFromSlide, nil, password, folderName, "", "")
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	if result == nil {
+		t.Errorf("Shape should not be nil.")
 	}
 }

@@ -62,17 +62,16 @@ type Configuration struct {
 	Timeout               int 	        `json:"Timeout,omitempty"`
 	CustomHeaders         map[string]string	`json:"CustomHeaders,omitempty"`
 	HTTPClient            *http.Client
+	Logger                func(string)      `json:"-"`
 }
 
 func NewConfiguration() *Configuration {
 	cfg := &Configuration{
 		BasePath:      "https://api.aspose.cloud",
-		AsyncBasePath:  "https://api.aspose.cloud",
-		AuthBasePath:  "https://api.aspose.cloud",
 		AppSid:        "",
 		AppKey:        "",
 		Version:       "v3.0",
-		ApiVersion:    "26.1.0",
+		ApiVersion:    "26.6.0",
 		CustomHeaders: make(map[string]string),
 	}
 	return cfg
@@ -80,4 +79,18 @@ func NewConfiguration() *Configuration {
 
 func (c *Configuration) GetApiUrl() string {
 	return c.BasePath + "/" + c.Version
+}
+
+func (c *Configuration) GetAsyncBasePath() string {
+	if c.AsyncBasePath != "" {
+		return c.AsyncBasePath
+	}
+	return c.BasePath
+}
+
+func (c *Configuration) GetAuthBasePath() string {
+	if c.AuthBasePath != "" {
+		return c.AuthBasePath
+	}
+	return c.BasePath
 }

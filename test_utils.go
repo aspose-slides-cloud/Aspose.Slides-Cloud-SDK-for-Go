@@ -170,7 +170,7 @@ func GetTestSlidesAsyncApiClient() *APIClient {
 		if err == nil {
 			json.NewDecoder(configFile).Decode(cfg)
 		}
-		cfg.BasePath = cfg.AsyncBasePath
+		cfg.BasePath = cfg.GetAsyncBasePath()
 		testAsyncApiClient = NewAPIClient(cfg)
 	}
 	return testAsyncApiClient

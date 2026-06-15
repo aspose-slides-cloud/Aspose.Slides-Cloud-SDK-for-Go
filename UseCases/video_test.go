@@ -57,7 +57,7 @@ func TestVideoCaptionTracks(t *testing.T) {
 
 	dto := slidescloud.NewVideoFrame()
 	dto.Base64Data = "bXAzc2FtcGxl"
-	_, _, e = c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, password, folderName, "", "")
+	_, _, e = c.SlidesApi.CreateShape(fileName, slideIndex, dto, nil, nil, nil, password, folderName, "", "")
 	if e != nil {
 		t.Errorf("Error: %v.", e)
 		return

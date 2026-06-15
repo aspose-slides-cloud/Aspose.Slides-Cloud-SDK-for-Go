@@ -215,7 +215,7 @@ func TestNotesSlideShapes(t *testing.T) {
 	dto.Height = 200
 	dto.ShapeType = "Rectangle"
 	dto.Text = "New shape"
-	shape, _, e := c.SlidesApi.CreateSpecialSlideShape(fileName, slideIndex, "notesSlide", dto, nil, nil, password, folderName, "", "")
+	shape, _, e := c.SlidesApi.CreateSpecialSlideShape(fileName, slideIndex, "notesSlide", dto, nil, nil, nil, password, folderName, "", "")
 	if e != nil {
 		t.Errorf("Error: %v.", e)
 		return

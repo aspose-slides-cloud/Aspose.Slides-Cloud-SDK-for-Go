@@ -28,6 +28,7 @@
 package usecasetests
 
 import (
+	"io/ioutil"
 	"testing"
 
 	slidescloud "github.com/aspose-slides-cloud/Aspose.Slides-Cloud-SDK-for-Go/v26"
@@ -113,7 +114,7 @@ func TestCreateChartAutoDataSource(t *testing.T) {
 	category3 := slidescloud.NewChartCategory()
 	category3.Value = "Category3"
 	chart.Categories = []slidescloud.IChartCategory{category1, category2, category3}
-	result, _, e := c.SlidesApi.CreateShape(fileName, chartSlideIndex, chart, nil, nil, password, folderName, "", "")
+	result, _, e := c.SlidesApi.CreateShape(fileName, chartSlideIndex, chart, nil, nil, nil, password, folderName, "", "")
 	if e != nil {
 		t.Errorf("Error: %v.", e)
 		return
@@ -205,7 +206,7 @@ func TestCreateChartWorkbook(t *testing.T) {
 	category3 := slidescloud.NewChartCategory()
 	category3.Value = "Category3"
 	chart.Categories = []slidescloud.IChartCategory{category1, category2, category3}
-	result, _, e := c.SlidesApi.CreateShape(fileName, chartSlideIndex, chart, nil, nil, password, folderName, "", "")
+	result, _, e := c.SlidesApi.CreateShape(fileName, chartSlideIndex, chart, nil, nil, nil, password, folderName, "", "")
 	if e != nil {
 		t.Errorf("Error: %v.", e)
 		return
@@ -282,7 +283,7 @@ func TestCreateChartLiterals(t *testing.T) {
 	category3 := slidescloud.NewChartCategory()
 	category3.Value = "Category3"
 	chart.Categories = []slidescloud.IChartCategory{category1, category2, category3}
-	result, _, e := c.SlidesApi.CreateShape(fileName, chartSlideIndex, chart, nil, nil, password, folderName, "", "")
+	result, _, e := c.SlidesApi.CreateShape(fileName, chartSlideIndex, chart, nil, nil, nil, password, folderName, "", "")
 	if e != nil {
 		t.Errorf("Error: %v.", e)
 		return
@@ -757,7 +758,7 @@ func TestSunburstChart(t *testing.T) {
 	category4.Value = "Stem2"
 	category4.Level = 1
 	chart.Categories = []slidescloud.IChartCategory{category1, category2, category3, category4}
-	result, _, e := c.SlidesApi.CreateShape(fileName, chartSlideIndex, chart, nil, nil, password, folderName, "", "")
+	result, _, e := c.SlidesApi.CreateShape(fileName, chartSlideIndex, chart, nil, nil, nil, password, folderName, "", "")
 	if e != nil {
 		t.Errorf("Error: %v.", e)
 		return
@@ -838,7 +839,7 @@ func TestMultiLevelChartCategory(t *testing.T) {
 	category8.SetValue("Category8")
 	dto.Categories = []slidescloud.IChartCategory{category1, category2, category3, category4, category5, category6, category7, category8}
 
-	response, _, e := c.SlidesApi.CreateShape(fileName, chartSlideIndex, dto, nil, nil, password, folderName, "", "")
+	response, _, e := c.SlidesApi.CreateShape(fileName, chartSlideIndex, dto, nil, nil, nil, password, folderName, "", "")
 	if e != nil {
 		t.Errorf("Error: %v.", e)
 		return
@@ -1282,7 +1283,7 @@ func TestChartWorkbookFormulas(t *testing.T) {
 	category3 := slidescloud.NewChartCategory()
 	category3.Value = "Category3"
 	chart.Categories = []slidescloud.IChartCategory{category1, category2, category3}
-	result, _, e := c.SlidesApi.CreateShape(fileName, chartSlideIndex, chart, nil, nil, password, folderName, "", "")
+	result, _, e := c.SlidesApi.CreateShape(fileName, chartSlideIndex, chart, nil, nil, nil, password, folderName, "", "")
 	if e != nil {
 		t.Errorf("Error: %v.", e)
 		return
@@ -1292,5 +1293,68 @@ func TestChartWorkbookFormulas(t *testing.T) {
 	if dataPoint.GetValue() != 90 {
 		t.Errorf("Expected %v, but was %v", 90, dataPoint.GetValue())
 		return
+	}
+}
+
+func TestImportChartFromWorkbook(t *testing.T) {
+	c, e := GetApiClient()
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	_, e = c.SlidesApi.CopyFile(tempFilePath, filePath, "", "", "")
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+
+	document, e := ioutil.ReadFile(localFolder + "/oleObject.xlsx")
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	var chartIndex int32 = 1
+	result, _, e := c.SlidesApi.ImportChartFromWorkbook(fileName, chartSlideIndex, "Sheet1", document, "", &chartIndex,
+		nil, nil, nil, "", "", password, folderName, "")
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	if result.GetType() != "Chart" {
+		t.Errorf("Expected Chart but was %v.", result.GetType())
+	}
+}
+
+func TestImportChartFromWorkbookByPath(t *testing.T) {
+	c, e := GetApiClient()
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	_, e = c.SlidesApi.CopyFile(tempFilePath, filePath, "", "", "")
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+
+	document, e := ioutil.ReadFile(localFolder + "/oleObject.xlsx")
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	_, _, e = c.SlidesApi.UploadFile(folderName+"/oleObject.xlsx", document, "")
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	var chartIndex int32 = 1
+	result, _, e := c.SlidesApi.ImportChartFromWorkbook(fileName, chartSlideIndex, "Sheet1", nil, "", &chartIndex,
+		nil, nil, nil, folderName+"/oleObject.xlsx", "", password, folderName, "")
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	if result.GetType() != "Chart" {
+		t.Errorf("Expected Chart but was %v.", result.GetType())
 	}
 }
