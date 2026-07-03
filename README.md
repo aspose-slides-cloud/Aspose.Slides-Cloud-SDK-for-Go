@@ -48,6 +48,22 @@ You may want to check out Aspose free [Powerpoint to PDF](https://products.aspos
 * Added optional **shapeIndex** and **shapeIndex** parameters to **GetSlideImages** method.
 * Renamed **GetVideoCaptionTracks**, **CreateVideoCaptionTrack**, **DeleteVideoCaptionTracks** and **DeleteVideoCaptionTracks** methods into **GetCaptionTracks**, **CreateCaptionTrack**, **DeleteCaptionTracks** and **DeleteCaptionTracks**. The methods now work with video frames and audio frames.
 
+## Enhancements in Version 25.6
+
+* Added **GetVideoCaptionTracks**, **CreateVideoCaptionTrack**, **DeleteVideoCaptionTracks**, **DeleteVideoCaptionTracks** method.
+* Removed deprecated **DeletePictureCroppedAreas** method.
+* Added an optional **quality** parameter to **DownloadImage**, **DownloadImageOnline**, **DownloadImages**, **DownloadImagesOnline** method. It applies to jpeg fromat.
+* Added **RemoveEmptyLines**, **SlideNumberFormat** and **HandleRepeatedSpaces** properties to **MarkdownExportOptions** class.
+* Added **DeletePictureCroppedAreas** and **Resolution** parameters to **PictureFill** class that allow to compress and/or delete cropped aread of picture fill formats.
+* Added **Emf** to the list of allowed values for **ExportFormat**, **SlideExportFormat** and **ShapeExportFormat** enumerations. You can now export presentations, slides and shapes to EMF format.
+* Added **VolumeValue**, **FadeInDuration**, **FadeOutDuration**, **TrimFromStart** and **TrimFromEnd** properties to **AudioFrame** class.
+* Added **SkipJavaScriptLinks** boolean property to **ExportOptions** class.
+* Added **DisableFontLigatures** boolean property to **HtmlExportOptions**, **Html5ExportOptions** and **SvgExportOptions** class.
+* Added **SlidesLayoutOptions** property and removed **NotesCommentsLayouting** property from **Html5ExportOptions** class.
+* Added **RemoveEmptyLines**, **SlideNumberFormat** and **HandleRepeatedSpaces** properties to **MarkdownExportOptions** class.
+* Added **SlidesLayoutOptions** property and removed **CommentsPosition**, **CommentsAreaColor**, **CommentsAreaWidth**, **NotesPosition** and **ShowCommentsByNoAuthor** properties from **SwfExportOptions** class.
+* Added **RefreshThumbnail** boolean property to **PptxExportOptions** class.
+
 ## Licensing
 All Aspose.Slides Cloud SDKs are licensed under MIT License.
 
