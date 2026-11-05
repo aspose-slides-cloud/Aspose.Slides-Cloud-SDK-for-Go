@@ -177,6 +177,13 @@ func TestSetEmbeddedFonts(t *testing.T) {
 
 	fonts := []string{ fontName }
 	var onlyUsed bool = false
+
+	_, e = c.SlidesApi.CopyFile(tempFilePath, filePath, "", "", "")
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+
 	response, _, e := c.SlidesApi.SetEmbeddedFonts(fileName, nil, fonts, &onlyUsed, password, folderName, "")
 	if e != nil {
 		t.Errorf("Error: %v.", e)

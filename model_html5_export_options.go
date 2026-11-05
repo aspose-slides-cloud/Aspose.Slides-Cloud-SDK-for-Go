@@ -84,6 +84,10 @@ type IHtml5ExportOptions interface {
 	// true to disable ligatures in the rendered output.
 	GetDisableFontLigatures() *bool
 	SetDisableFontLigatures(newValue *bool)
+
+	// Represents the pictures compression level. Pictures are not compressed (DocumentResolution) by default. Not applied when TemplatesPath is set.
+	GetPicturesCompression() string
+	SetPicturesCompression(newValue string)
 }
 
 type Html5ExportOptions struct {
@@ -126,6 +130,9 @@ type Html5ExportOptions struct {
 
 	// true to disable ligatures in the rendered output.
 	DisableFontLigatures *bool `json:"DisableFontLigatures"`
+
+	// Represents the pictures compression level. Pictures are not compressed (DocumentResolution) by default. Not applied when TemplatesPath is set.
+	PicturesCompression string `json:"PicturesCompression,omitempty"`
 }
 
 func NewHtml5ExportOptions() *Html5ExportOptions {
@@ -223,6 +230,13 @@ func (this *Html5ExportOptions) GetDisableFontLigatures() *bool {
 
 func (this *Html5ExportOptions) SetDisableFontLigatures(newValue *bool) {
 	this.DisableFontLigatures = newValue
+}
+func (this *Html5ExportOptions) GetPicturesCompression() string {
+	return this.PicturesCompression
+}
+
+func (this *Html5ExportOptions) SetPicturesCompression(newValue string) {
+	this.PicturesCompression = newValue
 }
 
 func (this *Html5ExportOptions) UnmarshalJSON(b []byte) error {
@@ -417,6 +431,23 @@ func (this *Html5ExportOptions) UnmarshalJSON(b []byte) error {
 				return err
 			}
 			this.DisableFontLigatures = valueForDisableFontLigatures
+		}
+	}
+	
+	if valPicturesCompression, ok := GetMapValue(objMap, "picturesCompression"); ok {
+		if valPicturesCompression != nil {
+			var valueForPicturesCompression string
+			err = json.Unmarshal(*valPicturesCompression, &valueForPicturesCompression)
+			if err != nil {
+				var valueForPicturesCompressionInt int32
+				err = json.Unmarshal(*valPicturesCompression, &valueForPicturesCompressionInt)
+				if err != nil {
+					return err
+				}
+				this.PicturesCompression = string(valueForPicturesCompressionInt)
+			} else {
+				this.PicturesCompression = valueForPicturesCompression
+			}
 		}
 	}
 

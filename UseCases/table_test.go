@@ -475,6 +475,77 @@ func TestDeleteTableCellParagraph(t *testing.T) {
 	}
 }
 
+func TestDownloadTableCellParagraph(t *testing.T) {
+	c, e := GetApiClient()
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	_, e = c.SlidesApi.CopyFile(tempFilePath, filePath, "", "", "")
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+
+	var slideIndex int32 = 9
+	var shapeIndex int32 = 1
+	var rowIndex int32 = 1
+	var cellIndex int32 = 1
+	var paragraphIndex int32 = 1
+
+	result, _, e := c.SlidesApi.DownloadTableCellParagraph(fileName, slideIndex, shapeIndex, rowIndex, cellIndex, paragraphIndex,
+		"png", nil, nil, nil, password, folderName, "", "")
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	info, e := result.Stat()
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	if info.Size() == 0 {
+		t.Errorf("Expected non-empty result")
+		return
+	}
+}
+
+func TestSaveTableCellParagraph(t *testing.T) {
+	outPath := folderName + "/tableCellParagraph.png"
+	c, e := GetApiClient()
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	_, e = c.SlidesApi.CopyFile(tempFilePath, filePath, "", "", "")
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+
+	var slideIndex int32 = 9
+	var shapeIndex int32 = 1
+	var rowIndex int32 = 1
+	var cellIndex int32 = 1
+	var paragraphIndex int32 = 1
+
+	_, e = c.SlidesApi.SaveTableCellParagraph(fileName, slideIndex, shapeIndex, rowIndex, cellIndex, paragraphIndex,
+		"png", outPath, nil, nil, nil, password, folderName, "", "")
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	resultExists, _, e := c.SlidesApi.ObjectExists(outPath, "", "")
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	if !*resultExists.GetExists() {
+		t.Errorf("File %v does not exist on the storage.", outPath)
+		return
+	}
+}
+
 func TestGetTableCellPortions(t *testing.T) {
 	c, e := GetApiClient()
 	if e != nil {

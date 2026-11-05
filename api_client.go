@@ -512,12 +512,13 @@ func processFileResponse(reader io.Reader) (*os.File, error) {
 	if err != nil {
 		return out, err
 	}
-	defer out.Close()
 	_, err = io.Copy(out, reader)
 	if err != nil {
+		out.Close()
 		return out, err
 	}
-	return out, nil
+	_, err = out.Seek(0, 0)
+	return out, err
 }
 
 func GetMapValue(objMap map[string]*json.RawMessage, key string) (*json.RawMessage, bool) {

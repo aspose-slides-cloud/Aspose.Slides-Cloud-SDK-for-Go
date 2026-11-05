@@ -1934,7 +1934,7 @@ func TestSmartArtNodeDefaultParagraphFormat(t *testing.T) {
 	paragraphFormat := slidescloud.NewParagraphFormat()
 	bulletFill := slidescloud.NewSolidFill()
 	color := "#FFFF0000"
-	bulletFill.Color = &color
+	bulletFill.Color = color
 	paragraphFormat.BulletFillFormat = bulletFill
 	smartArt.GetNodes()[0].SetDefaultParagraphFormat(paragraphFormat)
 

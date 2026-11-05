@@ -746,3 +746,193 @@ func TestGetSubshapeParagraphEffective(t *testing.T) {
 		return
 	}
 }
+
+/*
+   Test for download paragraph
+*/
+func TestDownloadParagraph(t *testing.T) {
+	var slideIndex int32 = 6
+	var shapeIndex int32 = 2
+	var paragraphIndex int32 = 1
+
+	c, e := GetApiClient()
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	_, e = c.SlidesApi.CopyFile(tempFilePath, filePath, "", "", "")
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+
+	result, _, e := c.SlidesApi.DownloadParagraph(fileName, slideIndex, shapeIndex, paragraphIndex, "png", nil, nil, nil, password, folderName, "", "", "")
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	info, e := result.Stat()
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	if info.Size() == 0 {
+		t.Errorf("Expected non-empty result")
+		return
+	}
+}
+
+/*
+   Test for download subshape paragraph
+*/
+func TestDownloadSubshapeParagraph(t *testing.T) {
+	var slideIndex int32 = 6
+	var shapeIndex int32 = 3
+	var subShape = "1"
+	var paragraphIndex int32 = 1
+
+	c, e := GetApiClient()
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	_, e = c.SlidesApi.CopyFile(tempFilePath, filePath, "", "", "")
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+
+	result, _, e := c.SlidesApi.DownloadParagraph(fileName, slideIndex, shapeIndex, paragraphIndex, "png", nil, nil, nil, password, folderName, "", "", subShape)
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	info, e := result.Stat()
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	if info.Size() == 0 {
+		t.Errorf("Expected non-empty result")
+		return
+	}
+}
+
+/*
+   Test for download scaled paragraph
+*/
+func TestDownloadParagraphScaled(t *testing.T) {
+	var slideIndex int32 = 6
+	var shapeIndex int32 = 2
+	var paragraphIndex int32 = 1
+	var scale float64 = 2
+
+	c, e := GetApiClient()
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	_, e = c.SlidesApi.CopyFile(tempFilePath, filePath, "", "", "")
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+
+	result, _, e := c.SlidesApi.DownloadParagraph(fileName, slideIndex, shapeIndex, paragraphIndex, "png", nil, nil, nil, password, folderName, "", "", "")
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	scaledResult, _, e := c.SlidesApi.DownloadParagraph(fileName, slideIndex, shapeIndex, paragraphIndex, "png", &scale, &scale, nil, password, folderName, "", "", "")
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	info, e := result.Stat()
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	scaledInfo, e := scaledResult.Stat()
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	if scaledInfo.Size() <= info.Size() {
+		t.Errorf("Expected scaled size %v to be greater than %v", scaledInfo.Size(), info.Size())
+		return
+	}
+}
+
+/*
+   Test for save paragraph
+*/
+func TestSaveParagraph(t *testing.T) {
+	var slideIndex int32 = 6
+	var shapeIndex int32 = 2
+	var paragraphIndex int32 = 1
+	outPath := folderName + "/paragraph.png"
+
+	c, e := GetApiClient()
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	_, e = c.SlidesApi.CopyFile(tempFilePath, filePath, "", "", "")
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+
+	_, e = c.SlidesApi.SaveParagraph(fileName, slideIndex, shapeIndex, paragraphIndex, "png", outPath, nil, nil, nil, password, folderName, "", "", "")
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	resultExists, _, e := c.SlidesApi.ObjectExists(outPath, "", "")
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	if !*resultExists.GetExists() {
+		t.Errorf("File %v does not exist on the storage.", outPath)
+		return
+	}
+}
+
+/*
+   Test for save subshape paragraph
+*/
+func TestSaveSubshapeParagraph(t *testing.T) {
+	var slideIndex int32 = 6
+	var shapeIndex int32 = 3
+	var subShape = "1"
+	var paragraphIndex int32 = 1
+	outPath := folderName + "/paragraph.png"
+
+	c, e := GetApiClient()
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	_, e = c.SlidesApi.CopyFile(tempFilePath, filePath, "", "", "")
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+
+	_, e = c.SlidesApi.SaveParagraph(fileName, slideIndex, shapeIndex, paragraphIndex, "png", outPath, nil, nil, nil, password, folderName, "", "", subShape)
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	resultExists, _, e := c.SlidesApi.ObjectExists(outPath, "", "")
+	if e != nil {
+		t.Errorf("Error: %v.", e)
+		return
+	}
+	if !*resultExists.GetExists() {
+		t.Errorf("File %v does not exist on the storage.", outPath)
+		return
+	}
+}

@@ -206,6 +206,12 @@ func undefaultize(value interface{}, paramType string, ruleType string) interfac
 		json.Unmarshal(b, &arr)
 		return arr
 	}
+	if paramType == "[]string" {
+		var arr = []string{}
+		b, _ := json.Marshal(value)
+		json.Unmarshal(b, &arr)
+		return arr
+	}
 	if isModelClass(paramType) {
 		valueMap, ok := value.(map[string]interface{})
 		if ok {
@@ -270,6 +276,9 @@ func ruleTypeApplies(ruleType string, actualType string) bool {
 	}
         if ruleType == "int[]" {
             return actualType == "[]int32"
+	}
+        if ruleType == "string[]" {
+            return actualType == "[]string"
 	}
         if ruleType == "stream" {
             return actualType == "[]byte"

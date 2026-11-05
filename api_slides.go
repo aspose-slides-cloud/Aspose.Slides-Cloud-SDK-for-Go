@@ -12665,6 +12665,168 @@ func (a *SlidesApiService) DownloadNotesSlideOnline(document []byte, slideIndex 
 	return successPayload, localVarHttpResponse, err
 }
 
+/* SlidesApiService Render paragraph to specified picture format.
+ @param name Presentation name.
+ @param slideIndex Slide index.
+ @param shapeIndex Index of shape starting from 1
+ @param paragraphIndex Paragraph index.
+ @param format Export picture format.
+ @param optional (nil or map[string]interface{}) with one or more of:
+     @param "scaleX" (float64) X scale ratio.
+     @param "scaleY" (float64) Y scale ratio.
+     @param "quality" (int32) Image quality (1 to 100); applies to JPEG only.
+     @param "password" (string) Document password.
+     @param "folder" (string) Presentation folder.
+     @param "storage" (string) Presentation storage.
+     @param "fontsFolder" (string) Fonts folder.
+     @param "subShape" (string) Sub-shape path (e.g. \&quot;3\&quot;, \&quot;3/shapes/2).
+ @return *os.File*/
+func (a *SlidesApiService) DownloadParagraph(name string, slideIndex int32, shapeIndex int32, paragraphIndex int32, format string, scaleX *float64, scaleY *float64, quality *int32, password string, folder string, storage string, fontsFolder string, subShape string) (*os.File, *http.Response, error) {
+	var (
+		localVarHttpMethod = strings.ToUpper("Post")
+		localVarPostBody interface{}
+		localVarFiles [][]byte
+	 	successPayload *os.File
+	)
+
+	if len(name) == 0 {
+		return successPayload, nil, reportError("Missing required parameter name")
+	}
+	if len(format) == 0 {
+		return successPayload, nil, reportError("Missing required parameter format")
+	}
+	if !ImageExportFormat_Validate(format) {
+		return successPayload, nil, reportError("Invalid value for parameter format: " + format)
+	}
+	// create path and map variables
+	localVarPath := a.client.cfg.GetApiUrl() + "/slides/{name}/slides/{slideIndex}/shapes/{shapeIndex}/paragraphs/{paragraphIndex}/{format}"
+	namePathStringValue := fmt.Sprintf("%v", name)
+	if len(namePathStringValue) > 0 {
+		localVarPath = strings.Replace(localVarPath, "{"+"name"+"}", namePathStringValue, -1)
+	} else {
+		localVarPath = strings.Replace(localVarPath, "/{"+"name"+"}", "", -1)
+	}
+	slideIndexPathStringValue := fmt.Sprintf("%v", slideIndex)
+	if len(slideIndexPathStringValue) > 0 {
+		localVarPath = strings.Replace(localVarPath, "{"+"slideIndex"+"}", slideIndexPathStringValue, -1)
+	} else {
+		localVarPath = strings.Replace(localVarPath, "/{"+"slideIndex"+"}", "", -1)
+	}
+	shapeIndexPathStringValue := fmt.Sprintf("%v", shapeIndex)
+	if len(shapeIndexPathStringValue) > 0 {
+		localVarPath = strings.Replace(localVarPath, "{"+"shapeIndex"+"}", shapeIndexPathStringValue, -1)
+	} else {
+		localVarPath = strings.Replace(localVarPath, "/{"+"shapeIndex"+"}", "", -1)
+	}
+	paragraphIndexPathStringValue := fmt.Sprintf("%v", paragraphIndex)
+	if len(paragraphIndexPathStringValue) > 0 {
+		localVarPath = strings.Replace(localVarPath, "{"+"paragraphIndex"+"}", paragraphIndexPathStringValue, -1)
+	} else {
+		localVarPath = strings.Replace(localVarPath, "/{"+"paragraphIndex"+"}", "", -1)
+	}
+	formatPathStringValue := fmt.Sprintf("%v", format)
+	if len(formatPathStringValue) > 0 {
+		localVarPath = strings.Replace(localVarPath, "{"+"format"+"}", formatPathStringValue, -1)
+	} else {
+		localVarPath = strings.Replace(localVarPath, "/{"+"format"+"}", "", -1)
+	}
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+
+	if scaleX != nil {
+		if err := typeCheckParameter(*scaleX, "float64", "scaleX"); err != nil {
+			return successPayload, nil, err
+		}
+	}
+	if scaleY != nil {
+		if err := typeCheckParameter(*scaleY, "float64", "scaleY"); err != nil {
+			return successPayload, nil, err
+		}
+	}
+	if quality != nil {
+		if err := typeCheckParameter(*quality, "int32", "quality"); err != nil {
+			return successPayload, nil, err
+		}
+	}
+	if err := typeCheckParameter(password, "string", "password"); err != nil {
+		return successPayload, nil, err
+	}
+	if err := typeCheckParameter(folder, "string", "folder"); err != nil {
+		return successPayload, nil, err
+	}
+	if err := typeCheckParameter(storage, "string", "storage"); err != nil {
+		return successPayload, nil, err
+	}
+	if err := typeCheckParameter(fontsFolder, "string", "fontsFolder"); err != nil {
+		return successPayload, nil, err
+	}
+	if err := typeCheckParameter(subShape, "string", "subShape"); err != nil {
+		return successPayload, nil, err
+	}
+
+	if scaleX != nil {
+		localVarQueryParams.Add("ScaleX", parameterToString(*scaleX, ""))
+	}
+	if scaleY != nil {
+		localVarQueryParams.Add("ScaleY", parameterToString(*scaleY, ""))
+	}
+	if quality != nil {
+		localVarQueryParams.Add("Quality", parameterToString(*quality, ""))
+	}
+	if localVarTempParam := folder; len(localVarTempParam) > 0 {
+		localVarQueryParams.Add("Folder", parameterToString(localVarTempParam, ""))
+	}
+	if localVarTempParam := storage; len(localVarTempParam) > 0 {
+		localVarQueryParams.Add("Storage", parameterToString(localVarTempParam, ""))
+	}
+	if localVarTempParam := fontsFolder; len(localVarTempParam) > 0 {
+		localVarQueryParams.Add("FontsFolder", parameterToString(localVarTempParam, ""))
+	}
+	if localVarTempParam := subShape; len(localVarTempParam) > 0 {
+		localVarQueryParams.Add("SubShape", parameterToString(localVarTempParam, ""))
+	}
+	// to determine the Content-Type header
+	localVarHttpContentTypes := []string{ "application/json" }
+
+	// set Content-Type header
+	localVarHttpContentType := selectHeaderContentType(localVarHttpContentTypes)
+	if localVarHttpContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHttpContentType
+	}
+
+	// to determine the Accept header
+	localVarHttpHeaderAccepts := []string{
+		"multipart/form-data",
+		}
+
+	// set Accept header
+	localVarHttpHeaderAccept := selectHeaderAccept(localVarHttpHeaderAccepts)
+	if localVarHttpHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHttpHeaderAccept
+	}
+	if localVarTempParam := password; len(localVarTempParam) > 0 {
+		localVarHeaderParams["Password"] = parameterToString(localVarTempParam, "")
+	}
+	localVarHttpResponse, responseBytes, err := a.client.makeRequest(nil, localVarPath, localVarHttpMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFiles)
+	responseBody := bytes.NewReader(responseBytes)
+	if localVarHttpResponse != nil && localVarHttpResponse.StatusCode >= 300 {
+		var errorMessage ErrorMessage
+		if err = json.NewDecoder(responseBody).Decode(&errorMessage); err != nil {
+			return successPayload, localVarHttpResponse, reportError(localVarHttpResponse.Status)
+		}
+		return successPayload, localVarHttpResponse, reportError(string(responseBytes))
+	}
+
+	defer successPayload.Close()
+        successPayload, err = processFileResponse(responseBody)
+        if err != nil {
+		return successPayload, localVarHttpResponse, err
+        }
+
+	return successPayload, localVarHttpResponse, err
+}
+
 /* SlidesApiService Save a presentation to a specified format.
  @param name Document name.
  @param format Export format.
@@ -13560,6 +13722,175 @@ func (a *SlidesApiService) DownloadSpecialSlideShape(name string, slideIndex int
 		localVarHeaderParams["Password"] = parameterToString(localVarTempParam, "")
 	}
 	localVarPostBody = &options
+	localVarHttpResponse, responseBytes, err := a.client.makeRequest(nil, localVarPath, localVarHttpMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFiles)
+	responseBody := bytes.NewReader(responseBytes)
+	if localVarHttpResponse != nil && localVarHttpResponse.StatusCode >= 300 {
+		var errorMessage ErrorMessage
+		if err = json.NewDecoder(responseBody).Decode(&errorMessage); err != nil {
+			return successPayload, localVarHttpResponse, reportError(localVarHttpResponse.Status)
+		}
+		return successPayload, localVarHttpResponse, reportError(string(responseBytes))
+	}
+
+	defer successPayload.Close()
+        successPayload, err = processFileResponse(responseBody)
+        if err != nil {
+		return successPayload, localVarHttpResponse, err
+        }
+
+	return successPayload, localVarHttpResponse, err
+}
+
+/* SlidesApiService Render table cell paragraph to specified picture format.
+ @param name Document name.
+ @param slideIndex Slide index.
+ @param shapeIndex Shape index.
+ @param rowIndex Row index.
+ @param cellIndex Table cell index.
+ @param paragraphIndex Paragraph index.
+ @param format Export picture format.
+ @param optional (nil or map[string]interface{}) with one or more of:
+     @param "scaleX" (float64) X scale ratio.
+     @param "scaleY" (float64) Y scale ratio.
+     @param "quality" (int32) Image quality (1 to 100); applies to JPEG only.
+     @param "password" (string) Document password.
+     @param "folder" (string) Document folder.
+     @param "storage" (string) Document storage.
+     @param "fontsFolder" (string) Fonts folder.
+ @return *os.File*/
+func (a *SlidesApiService) DownloadTableCellParagraph(name string, slideIndex int32, shapeIndex int32, rowIndex int32, cellIndex int32, paragraphIndex int32, format string, scaleX *float64, scaleY *float64, quality *int32, password string, folder string, storage string, fontsFolder string) (*os.File, *http.Response, error) {
+	var (
+		localVarHttpMethod = strings.ToUpper("Post")
+		localVarPostBody interface{}
+		localVarFiles [][]byte
+	 	successPayload *os.File
+	)
+
+	if len(name) == 0 {
+		return successPayload, nil, reportError("Missing required parameter name")
+	}
+	if len(format) == 0 {
+		return successPayload, nil, reportError("Missing required parameter format")
+	}
+	if !ImageExportFormat_Validate(format) {
+		return successPayload, nil, reportError("Invalid value for parameter format: " + format)
+	}
+	// create path and map variables
+	localVarPath := a.client.cfg.GetApiUrl() + "/slides/{name}/slides/{slideIndex}/shapes/{shapeIndex}/rows/{rowIndex}/cells/{cellIndex}/paragraphs/{paragraphIndex}/{format}"
+	namePathStringValue := fmt.Sprintf("%v", name)
+	if len(namePathStringValue) > 0 {
+		localVarPath = strings.Replace(localVarPath, "{"+"name"+"}", namePathStringValue, -1)
+	} else {
+		localVarPath = strings.Replace(localVarPath, "/{"+"name"+"}", "", -1)
+	}
+	slideIndexPathStringValue := fmt.Sprintf("%v", slideIndex)
+	if len(slideIndexPathStringValue) > 0 {
+		localVarPath = strings.Replace(localVarPath, "{"+"slideIndex"+"}", slideIndexPathStringValue, -1)
+	} else {
+		localVarPath = strings.Replace(localVarPath, "/{"+"slideIndex"+"}", "", -1)
+	}
+	shapeIndexPathStringValue := fmt.Sprintf("%v", shapeIndex)
+	if len(shapeIndexPathStringValue) > 0 {
+		localVarPath = strings.Replace(localVarPath, "{"+"shapeIndex"+"}", shapeIndexPathStringValue, -1)
+	} else {
+		localVarPath = strings.Replace(localVarPath, "/{"+"shapeIndex"+"}", "", -1)
+	}
+	rowIndexPathStringValue := fmt.Sprintf("%v", rowIndex)
+	if len(rowIndexPathStringValue) > 0 {
+		localVarPath = strings.Replace(localVarPath, "{"+"rowIndex"+"}", rowIndexPathStringValue, -1)
+	} else {
+		localVarPath = strings.Replace(localVarPath, "/{"+"rowIndex"+"}", "", -1)
+	}
+	cellIndexPathStringValue := fmt.Sprintf("%v", cellIndex)
+	if len(cellIndexPathStringValue) > 0 {
+		localVarPath = strings.Replace(localVarPath, "{"+"cellIndex"+"}", cellIndexPathStringValue, -1)
+	} else {
+		localVarPath = strings.Replace(localVarPath, "/{"+"cellIndex"+"}", "", -1)
+	}
+	paragraphIndexPathStringValue := fmt.Sprintf("%v", paragraphIndex)
+	if len(paragraphIndexPathStringValue) > 0 {
+		localVarPath = strings.Replace(localVarPath, "{"+"paragraphIndex"+"}", paragraphIndexPathStringValue, -1)
+	} else {
+		localVarPath = strings.Replace(localVarPath, "/{"+"paragraphIndex"+"}", "", -1)
+	}
+	formatPathStringValue := fmt.Sprintf("%v", format)
+	if len(formatPathStringValue) > 0 {
+		localVarPath = strings.Replace(localVarPath, "{"+"format"+"}", formatPathStringValue, -1)
+	} else {
+		localVarPath = strings.Replace(localVarPath, "/{"+"format"+"}", "", -1)
+	}
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+
+	if scaleX != nil {
+		if err := typeCheckParameter(*scaleX, "float64", "scaleX"); err != nil {
+			return successPayload, nil, err
+		}
+	}
+	if scaleY != nil {
+		if err := typeCheckParameter(*scaleY, "float64", "scaleY"); err != nil {
+			return successPayload, nil, err
+		}
+	}
+	if quality != nil {
+		if err := typeCheckParameter(*quality, "int32", "quality"); err != nil {
+			return successPayload, nil, err
+		}
+	}
+	if err := typeCheckParameter(password, "string", "password"); err != nil {
+		return successPayload, nil, err
+	}
+	if err := typeCheckParameter(folder, "string", "folder"); err != nil {
+		return successPayload, nil, err
+	}
+	if err := typeCheckParameter(storage, "string", "storage"); err != nil {
+		return successPayload, nil, err
+	}
+	if err := typeCheckParameter(fontsFolder, "string", "fontsFolder"); err != nil {
+		return successPayload, nil, err
+	}
+
+	if scaleX != nil {
+		localVarQueryParams.Add("ScaleX", parameterToString(*scaleX, ""))
+	}
+	if scaleY != nil {
+		localVarQueryParams.Add("ScaleY", parameterToString(*scaleY, ""))
+	}
+	if quality != nil {
+		localVarQueryParams.Add("Quality", parameterToString(*quality, ""))
+	}
+	if localVarTempParam := folder; len(localVarTempParam) > 0 {
+		localVarQueryParams.Add("Folder", parameterToString(localVarTempParam, ""))
+	}
+	if localVarTempParam := storage; len(localVarTempParam) > 0 {
+		localVarQueryParams.Add("Storage", parameterToString(localVarTempParam, ""))
+	}
+	if localVarTempParam := fontsFolder; len(localVarTempParam) > 0 {
+		localVarQueryParams.Add("FontsFolder", parameterToString(localVarTempParam, ""))
+	}
+	// to determine the Content-Type header
+	localVarHttpContentTypes := []string{ "application/json" }
+
+	// set Content-Type header
+	localVarHttpContentType := selectHeaderContentType(localVarHttpContentTypes)
+	if localVarHttpContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHttpContentType
+	}
+
+	// to determine the Accept header
+	localVarHttpHeaderAccepts := []string{
+		"multipart/form-data",
+		}
+
+	// set Accept header
+	localVarHttpHeaderAccept := selectHeaderAccept(localVarHttpHeaderAccepts)
+	if localVarHttpHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHttpHeaderAccept
+	}
+	if localVarTempParam := password; len(localVarTempParam) > 0 {
+		localVarHeaderParams["Password"] = parameterToString(localVarTempParam, "")
+	}
 	localVarHttpResponse, responseBytes, err := a.client.makeRequest(nil, localVarPath, localVarHttpMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFiles)
 	responseBody := bytes.NewReader(responseBytes)
 	if localVarHttpResponse != nil && localVarHttpResponse.StatusCode >= 300 {
@@ -21761,7 +22092,9 @@ func (a *SlidesApiService) MergeAndSaveOnline(outPath string, files [][]byte, re
 	if localVarHttpHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHttpHeaderAccept
 	}
-	localVarFiles = files
+	if len(files) > 0 {
+		localVarFiles = append(localVarFiles, files...)
+	}
 	localVarPostBody = &request
 	localVarHttpResponse, responseBytes, err := a.client.makeRequest(nil, localVarPath, localVarHttpMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFiles)
 	responseBody := bytes.NewReader(responseBytes)
@@ -21823,7 +22156,9 @@ func (a *SlidesApiService) MergeOnline(files [][]byte, request IOrderedMergeRequ
 	if localVarHttpHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHttpHeaderAccept
 	}
-	localVarFiles = files
+	if len(files) > 0 {
+		localVarFiles = append(localVarFiles, files...)
+	}
 	localVarPostBody = &request
 	localVarHttpResponse, responseBytes, err := a.client.makeRequest(nil, localVarPath, localVarHttpMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFiles)
 	responseBody := bytes.NewReader(responseBytes)
@@ -22741,7 +23076,9 @@ func (a *SlidesApiService) Pipeline(pipeline IPipeline, files [][]byte) (*os.Fil
 	if localVarHttpHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHttpHeaderAccept
 	}
-	localVarFiles = files
+	if len(files) > 0 {
+		localVarFiles = append(localVarFiles, files...)
+	}
 	localVarPostBody = &pipeline
 	localVarHttpResponse, responseBytes, err := a.client.makeRequest(nil, localVarPath, localVarHttpMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFiles)
 	responseBody := bytes.NewReader(responseBytes)
@@ -24250,6 +24587,167 @@ func (a *SlidesApiService) SaveMathPortion(name string, slideIndex int32, shapeI
 	return localVarHttpResponse, err
 }
 
+/* SlidesApiService Render paragraph to specified picture format and save it to the storage.
+ @param name Presentation name.
+ @param slideIndex Slide index.
+ @param shapeIndex Index of shape starting from 1
+ @param paragraphIndex Paragraph index.
+ @param format Export picture format.
+ @param outPath Output path.
+ @param optional (nil or map[string]interface{}) with one or more of:
+     @param "scaleX" (float64) X scale ratio.
+     @param "scaleY" (float64) Y scale ratio.
+     @param "quality" (int32) Image quality (1 to 100); applies to JPEG only.
+     @param "password" (string) Document password.
+     @param "folder" (string) Presentation folder.
+     @param "storage" (string) Presentation storage.
+     @param "fontsFolder" (string) Fonts folder.
+     @param "subShape" (string) Sub-shape path (e.g. \&quot;3\&quot;, \&quot;3/shapes/2).
+ @return */
+func (a *SlidesApiService) SaveParagraph(name string, slideIndex int32, shapeIndex int32, paragraphIndex int32, format string, outPath string, scaleX *float64, scaleY *float64, quality *int32, password string, folder string, storage string, fontsFolder string, subShape string) (*http.Response, error) {
+	var (
+		localVarHttpMethod = strings.ToUpper("Put")
+		localVarPostBody interface{}
+		localVarFiles [][]byte
+	)
+
+	if len(name) == 0 {
+		return nil, reportError("Missing required parameter name")
+	}
+	if len(format) == 0 {
+		return nil, reportError("Missing required parameter format")
+	}
+	if !ImageExportFormat_Validate(format) {
+		return nil, reportError("Invalid value for parameter format: " + format)
+	}
+	if len(outPath) == 0 {
+		return nil, reportError("Missing required parameter outPath")
+	}
+	// create path and map variables
+	localVarPath := a.client.cfg.GetApiUrl() + "/slides/{name}/slides/{slideIndex}/shapes/{shapeIndex}/paragraphs/{paragraphIndex}/{format}"
+	namePathStringValue := fmt.Sprintf("%v", name)
+	if len(namePathStringValue) > 0 {
+		localVarPath = strings.Replace(localVarPath, "{"+"name"+"}", namePathStringValue, -1)
+	} else {
+		localVarPath = strings.Replace(localVarPath, "/{"+"name"+"}", "", -1)
+	}
+	slideIndexPathStringValue := fmt.Sprintf("%v", slideIndex)
+	if len(slideIndexPathStringValue) > 0 {
+		localVarPath = strings.Replace(localVarPath, "{"+"slideIndex"+"}", slideIndexPathStringValue, -1)
+	} else {
+		localVarPath = strings.Replace(localVarPath, "/{"+"slideIndex"+"}", "", -1)
+	}
+	shapeIndexPathStringValue := fmt.Sprintf("%v", shapeIndex)
+	if len(shapeIndexPathStringValue) > 0 {
+		localVarPath = strings.Replace(localVarPath, "{"+"shapeIndex"+"}", shapeIndexPathStringValue, -1)
+	} else {
+		localVarPath = strings.Replace(localVarPath, "/{"+"shapeIndex"+"}", "", -1)
+	}
+	paragraphIndexPathStringValue := fmt.Sprintf("%v", paragraphIndex)
+	if len(paragraphIndexPathStringValue) > 0 {
+		localVarPath = strings.Replace(localVarPath, "{"+"paragraphIndex"+"}", paragraphIndexPathStringValue, -1)
+	} else {
+		localVarPath = strings.Replace(localVarPath, "/{"+"paragraphIndex"+"}", "", -1)
+	}
+	formatPathStringValue := fmt.Sprintf("%v", format)
+	if len(formatPathStringValue) > 0 {
+		localVarPath = strings.Replace(localVarPath, "{"+"format"+"}", formatPathStringValue, -1)
+	} else {
+		localVarPath = strings.Replace(localVarPath, "/{"+"format"+"}", "", -1)
+	}
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+
+	if scaleX != nil {
+		if err := typeCheckParameter(*scaleX, "float64", "scaleX"); err != nil {
+			return nil, err
+		}
+	}
+	if scaleY != nil {
+		if err := typeCheckParameter(*scaleY, "float64", "scaleY"); err != nil {
+			return nil, err
+		}
+	}
+	if quality != nil {
+		if err := typeCheckParameter(*quality, "int32", "quality"); err != nil {
+			return nil, err
+		}
+	}
+	if err := typeCheckParameter(password, "string", "password"); err != nil {
+		return nil, err
+	}
+	if err := typeCheckParameter(folder, "string", "folder"); err != nil {
+		return nil, err
+	}
+	if err := typeCheckParameter(storage, "string", "storage"); err != nil {
+		return nil, err
+	}
+	if err := typeCheckParameter(fontsFolder, "string", "fontsFolder"); err != nil {
+		return nil, err
+	}
+	if err := typeCheckParameter(subShape, "string", "subShape"); err != nil {
+		return nil, err
+	}
+
+	localVarQueryParams.Add("OutPath", parameterToString(outPath, ""))
+	if scaleX != nil {
+		localVarQueryParams.Add("ScaleX", parameterToString(*scaleX, ""))
+	}
+	if scaleY != nil {
+		localVarQueryParams.Add("ScaleY", parameterToString(*scaleY, ""))
+	}
+	if quality != nil {
+		localVarQueryParams.Add("Quality", parameterToString(*quality, ""))
+	}
+	if localVarTempParam := folder; len(localVarTempParam) > 0 {
+		localVarQueryParams.Add("Folder", parameterToString(localVarTempParam, ""))
+	}
+	if localVarTempParam := storage; len(localVarTempParam) > 0 {
+		localVarQueryParams.Add("Storage", parameterToString(localVarTempParam, ""))
+	}
+	if localVarTempParam := fontsFolder; len(localVarTempParam) > 0 {
+		localVarQueryParams.Add("FontsFolder", parameterToString(localVarTempParam, ""))
+	}
+	if localVarTempParam := subShape; len(localVarTempParam) > 0 {
+		localVarQueryParams.Add("SubShape", parameterToString(localVarTempParam, ""))
+	}
+	// to determine the Content-Type header
+	localVarHttpContentTypes := []string{ "application/json" }
+
+	// set Content-Type header
+	localVarHttpContentType := selectHeaderContentType(localVarHttpContentTypes)
+	if localVarHttpContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHttpContentType
+	}
+
+	// to determine the Accept header
+	localVarHttpHeaderAccepts := []string{
+		"application/json",
+		}
+
+	// set Accept header
+	localVarHttpHeaderAccept := selectHeaderAccept(localVarHttpHeaderAccepts)
+	if localVarHttpHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHttpHeaderAccept
+	}
+	if localVarTempParam := password; len(localVarTempParam) > 0 {
+		localVarHeaderParams["Password"] = parameterToString(localVarTempParam, "")
+	}
+	localVarHttpResponse, responseBytes, err := a.client.makeRequest(nil, localVarPath, localVarHttpMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFiles)
+	responseBody := bytes.NewReader(responseBytes)
+	if localVarHttpResponse != nil && localVarHttpResponse.StatusCode >= 300 {
+		var errorMessage ErrorMessage
+		if err = json.NewDecoder(responseBody).Decode(&errorMessage); err != nil {
+			return localVarHttpResponse, reportError(localVarHttpResponse.Status)
+		}
+		return localVarHttpResponse, reportError(string(responseBytes))
+	}
+
+
+	return localVarHttpResponse, err
+}
+
 /* SlidesApiService Save a presentation to a specified format.
  @param name Document name.
  @param format Export format.
@@ -25071,6 +25569,174 @@ func (a *SlidesApiService) SaveSpecialSlideShape(name string, slideIndex int32, 
 		localVarHeaderParams["Password"] = parameterToString(localVarTempParam, "")
 	}
 	localVarPostBody = &options
+	localVarHttpResponse, responseBytes, err := a.client.makeRequest(nil, localVarPath, localVarHttpMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFiles)
+	responseBody := bytes.NewReader(responseBytes)
+	if localVarHttpResponse != nil && localVarHttpResponse.StatusCode >= 300 {
+		var errorMessage ErrorMessage
+		if err = json.NewDecoder(responseBody).Decode(&errorMessage); err != nil {
+			return localVarHttpResponse, reportError(localVarHttpResponse.Status)
+		}
+		return localVarHttpResponse, reportError(string(responseBytes))
+	}
+
+
+	return localVarHttpResponse, err
+}
+
+/* SlidesApiService Render table cell paragraph to specified picture format and save it to the storage.
+ @param name Document name.
+ @param slideIndex Slide index.
+ @param shapeIndex Shape index.
+ @param rowIndex Row index.
+ @param cellIndex Table cell index.
+ @param paragraphIndex Paragraph index.
+ @param format Export picture format.
+ @param outPath Output path.
+ @param optional (nil or map[string]interface{}) with one or more of:
+     @param "scaleX" (float64) X scale ratio.
+     @param "scaleY" (float64) Y scale ratio.
+     @param "quality" (int32) Image quality (1 to 100); applies to JPEG only.
+     @param "password" (string) Document password.
+     @param "folder" (string) Document folder.
+     @param "storage" (string) Document storage.
+     @param "fontsFolder" (string) Fonts folder.
+ @return */
+func (a *SlidesApiService) SaveTableCellParagraph(name string, slideIndex int32, shapeIndex int32, rowIndex int32, cellIndex int32, paragraphIndex int32, format string, outPath string, scaleX *float64, scaleY *float64, quality *int32, password string, folder string, storage string, fontsFolder string) (*http.Response, error) {
+	var (
+		localVarHttpMethod = strings.ToUpper("Put")
+		localVarPostBody interface{}
+		localVarFiles [][]byte
+	)
+
+	if len(name) == 0 {
+		return nil, reportError("Missing required parameter name")
+	}
+	if len(format) == 0 {
+		return nil, reportError("Missing required parameter format")
+	}
+	if !ImageExportFormat_Validate(format) {
+		return nil, reportError("Invalid value for parameter format: " + format)
+	}
+	if len(outPath) == 0 {
+		return nil, reportError("Missing required parameter outPath")
+	}
+	// create path and map variables
+	localVarPath := a.client.cfg.GetApiUrl() + "/slides/{name}/slides/{slideIndex}/shapes/{shapeIndex}/rows/{rowIndex}/cells/{cellIndex}/paragraphs/{paragraphIndex}/{format}"
+	namePathStringValue := fmt.Sprintf("%v", name)
+	if len(namePathStringValue) > 0 {
+		localVarPath = strings.Replace(localVarPath, "{"+"name"+"}", namePathStringValue, -1)
+	} else {
+		localVarPath = strings.Replace(localVarPath, "/{"+"name"+"}", "", -1)
+	}
+	slideIndexPathStringValue := fmt.Sprintf("%v", slideIndex)
+	if len(slideIndexPathStringValue) > 0 {
+		localVarPath = strings.Replace(localVarPath, "{"+"slideIndex"+"}", slideIndexPathStringValue, -1)
+	} else {
+		localVarPath = strings.Replace(localVarPath, "/{"+"slideIndex"+"}", "", -1)
+	}
+	shapeIndexPathStringValue := fmt.Sprintf("%v", shapeIndex)
+	if len(shapeIndexPathStringValue) > 0 {
+		localVarPath = strings.Replace(localVarPath, "{"+"shapeIndex"+"}", shapeIndexPathStringValue, -1)
+	} else {
+		localVarPath = strings.Replace(localVarPath, "/{"+"shapeIndex"+"}", "", -1)
+	}
+	rowIndexPathStringValue := fmt.Sprintf("%v", rowIndex)
+	if len(rowIndexPathStringValue) > 0 {
+		localVarPath = strings.Replace(localVarPath, "{"+"rowIndex"+"}", rowIndexPathStringValue, -1)
+	} else {
+		localVarPath = strings.Replace(localVarPath, "/{"+"rowIndex"+"}", "", -1)
+	}
+	cellIndexPathStringValue := fmt.Sprintf("%v", cellIndex)
+	if len(cellIndexPathStringValue) > 0 {
+		localVarPath = strings.Replace(localVarPath, "{"+"cellIndex"+"}", cellIndexPathStringValue, -1)
+	} else {
+		localVarPath = strings.Replace(localVarPath, "/{"+"cellIndex"+"}", "", -1)
+	}
+	paragraphIndexPathStringValue := fmt.Sprintf("%v", paragraphIndex)
+	if len(paragraphIndexPathStringValue) > 0 {
+		localVarPath = strings.Replace(localVarPath, "{"+"paragraphIndex"+"}", paragraphIndexPathStringValue, -1)
+	} else {
+		localVarPath = strings.Replace(localVarPath, "/{"+"paragraphIndex"+"}", "", -1)
+	}
+	formatPathStringValue := fmt.Sprintf("%v", format)
+	if len(formatPathStringValue) > 0 {
+		localVarPath = strings.Replace(localVarPath, "{"+"format"+"}", formatPathStringValue, -1)
+	} else {
+		localVarPath = strings.Replace(localVarPath, "/{"+"format"+"}", "", -1)
+	}
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+
+	if scaleX != nil {
+		if err := typeCheckParameter(*scaleX, "float64", "scaleX"); err != nil {
+			return nil, err
+		}
+	}
+	if scaleY != nil {
+		if err := typeCheckParameter(*scaleY, "float64", "scaleY"); err != nil {
+			return nil, err
+		}
+	}
+	if quality != nil {
+		if err := typeCheckParameter(*quality, "int32", "quality"); err != nil {
+			return nil, err
+		}
+	}
+	if err := typeCheckParameter(password, "string", "password"); err != nil {
+		return nil, err
+	}
+	if err := typeCheckParameter(folder, "string", "folder"); err != nil {
+		return nil, err
+	}
+	if err := typeCheckParameter(storage, "string", "storage"); err != nil {
+		return nil, err
+	}
+	if err := typeCheckParameter(fontsFolder, "string", "fontsFolder"); err != nil {
+		return nil, err
+	}
+
+	localVarQueryParams.Add("OutPath", parameterToString(outPath, ""))
+	if scaleX != nil {
+		localVarQueryParams.Add("ScaleX", parameterToString(*scaleX, ""))
+	}
+	if scaleY != nil {
+		localVarQueryParams.Add("ScaleY", parameterToString(*scaleY, ""))
+	}
+	if quality != nil {
+		localVarQueryParams.Add("Quality", parameterToString(*quality, ""))
+	}
+	if localVarTempParam := folder; len(localVarTempParam) > 0 {
+		localVarQueryParams.Add("Folder", parameterToString(localVarTempParam, ""))
+	}
+	if localVarTempParam := storage; len(localVarTempParam) > 0 {
+		localVarQueryParams.Add("Storage", parameterToString(localVarTempParam, ""))
+	}
+	if localVarTempParam := fontsFolder; len(localVarTempParam) > 0 {
+		localVarQueryParams.Add("FontsFolder", parameterToString(localVarTempParam, ""))
+	}
+	// to determine the Content-Type header
+	localVarHttpContentTypes := []string{ "application/json" }
+
+	// set Content-Type header
+	localVarHttpContentType := selectHeaderContentType(localVarHttpContentTypes)
+	if localVarHttpContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHttpContentType
+	}
+
+	// to determine the Accept header
+	localVarHttpHeaderAccepts := []string{
+		"application/json",
+		}
+
+	// set Accept header
+	localVarHttpHeaderAccept := selectHeaderAccept(localVarHttpHeaderAccepts)
+	if localVarHttpHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHttpHeaderAccept
+	}
+	if localVarTempParam := password; len(localVarTempParam) > 0 {
+		localVarHeaderParams["Password"] = parameterToString(localVarTempParam, "")
+	}
 	localVarHttpResponse, responseBytes, err := a.client.makeRequest(nil, localVarPath, localVarHttpMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFiles)
 	responseBody := bytes.NewReader(responseBytes)
 	if localVarHttpResponse != nil && localVarHttpResponse.StatusCode >= 300 {
@@ -26394,7 +27060,9 @@ func (a *SlidesApiService) SetEmbeddedFonts(name string, fonts [][]byte, fontNam
 	if localVarTempParam := password; len(localVarTempParam) > 0 {
 		localVarHeaderParams["Password"] = parameterToString(localVarTempParam, "")
 	}
-	localVarFiles = fonts
+	if len(fonts) > 0 {
+		localVarFiles = append(localVarFiles, fonts...)
+	}
 	localVarHttpResponse, responseBytes, err := a.client.makeRequest(nil, localVarPath, localVarHttpMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFiles)
 	responseBody := bytes.NewReader(responseBytes)
 	if localVarHttpResponse != nil && localVarHttpResponse.StatusCode >= 300 {
@@ -26486,7 +27154,9 @@ func (a *SlidesApiService) SetEmbeddedFontsOnline(document []byte, fonts [][]byt
 	if len(document) > 0 {
 		localVarFiles = append(localVarFiles, document)
 	}
-	localVarFiles = fonts
+	if len(fonts) > 0 {
+		localVarFiles = append(localVarFiles, fonts...)
+	}
 	localVarHttpResponse, responseBytes, err := a.client.makeRequest(nil, localVarPath, localVarHttpMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFiles)
 	responseBody := bytes.NewReader(responseBytes)
 	if localVarHttpResponse != nil && localVarHttpResponse.StatusCode >= 300 {

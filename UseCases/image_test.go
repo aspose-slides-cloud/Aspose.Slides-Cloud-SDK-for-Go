@@ -81,7 +81,7 @@ func TestImagesGet(t *testing.T) {
 		t.Errorf("Error: %v.", e)
 		return
 	}
-	if len(shapeResult.GetList()) != 0 {
+	if len(altResult.GetList()) != 0 {
 		t.Errorf("Wrong image count. Expected %v but was %v.", 0, len(altResult.GetList()))
 		return
 	}
